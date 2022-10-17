@@ -12,7 +12,7 @@ const BestSeller = () => {
 	}, []);
 
 	return (
-		<div className='bg-pink-soft mt-5'>
+		<div className='bg-pink-soft'>
 			<div className='p-5 container'>
 				<h2 className='text-3xl text-center  fw-bold'>
 					Best Selling Book Ever

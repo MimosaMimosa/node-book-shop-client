@@ -20,7 +20,7 @@ const Navbar = () => {
 				</div>
 				</div>
 				<div>
-					<ul className='flex'>
+					<ul className='flex items-center'>
 						<li className="mx-3">
 							<span>FAQ</span>
 						</li>
@@ -37,6 +37,9 @@ const Navbar = () => {
 									0
 								</span>
 							</span>
+						</li>
+						<li className="ml-5">
+							<button className="py-4 px-10 bg-red-600 text-sm text-white rounded-3xl">Sign Up</button>
 						</li>
 					</ul>
 				</div>
