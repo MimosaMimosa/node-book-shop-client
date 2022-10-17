@@ -4,6 +4,10 @@ const Navbar = () => {
 	return (
 		<div>
 			<div className='flex container justify-between items-center'>
+				<div className="flex items-center">
+					<h1 className="mr-4">
+						<img src="./assets/image/logo.webp" alt="" />
+					</h1>
 				<div className='bg-white p-3'>
 					<div className='flex justify-between rounded-3xl p-3 border-3xl border'>
 						<input
@@ -13,6 +17,7 @@ const Navbar = () => {
 						/>
 						<SearchIcon />
 					</div>
+				</div>
 				</div>
 				<div>
 					<ul className='flex'>
