@@ -1,6 +1,7 @@
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import SubscriptionsRoundedIcon from '@mui/icons-material/SubscriptionsRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 const Footer = () => {
 	return (
 		<div>
@@ -164,7 +165,7 @@ const Footer = () => {
 			</div>
 
 			<div className='container mt-6 border-t border-light bg-primary/50 py-6 text-center text-sm'>
-				Styled with tailwincss and developed with <a href='' className='mx-2 text-red-600'>Hsu</a>|<a href='' className='mx-2 text-red-600'>Kyi</a>|<a href="" className='mx-2 text-red-600'>Wyl</a>
+				Styled with <span className='text-blue-500'>Tailwincss</span> &  Developed with <a href='https://github.com/HsuMonLynn' className='mx-2 text-red-600'>Hsu</a>|<a href='https://github.com/KyiMyatNoeSoe7' className='mx-2 text-red-600'>Kyi</a>|<a href="https://github.com/WaiYanLin71" className='mx-2 text-red-600'>Wyl</a> <FavoriteRoundedIcon style={{ color:'red' }}/>
 			</div>
 		</div>
 	);
