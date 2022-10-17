@@ -1,3 +1,4 @@
+import Banner from "../../components/Bannder/Banner"
 import BestSeller from "../../components/BookCard/BestSeller"
 import FeatureThisWeek from "../../components/FeatureThisWeek/FeatureThisWeek"
 import Footer from "../../components/Footer/Footer"
@@ -9,6 +10,7 @@ const Home = () => {
   return (
     <div className="home">
       <Navbar/>
+      <Banner/>
       <BestSeller/>
       <FeatureThisWeek/>
       <LatestBook/>
