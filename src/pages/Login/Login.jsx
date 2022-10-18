@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import AuthContext from "../../store/Context/AuthContext";
 import {toast } from 'react-toastify';
 import {Link, useNavigate} from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -19,6 +20,7 @@ const Login = () => {
 			})
 			.then((res) => {
 				dispatch({ type: "STORE", data: res.data });
+				Cookies.set('node_book_shop',JSON.stringify(res.data),{ expires: 3 })
                 toast.success('Login Success');
                 navigate('/')
 			}).catch((error) => {

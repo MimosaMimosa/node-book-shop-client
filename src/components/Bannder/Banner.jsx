@@ -11,11 +11,11 @@ const Banner = () => {
 					<button className='rounded-3xl bg-white py-2 px-5 text-gray-400 text-sm mb-6'>
 						Science Fiction
 					</button>
-					<h1 className='text-6xl font-serif leading-[70px]'>
+					<h2 className='text-6xl font-serif leading-[70px]'>
 						The History
 						<br />
 						of Phipino
-					</h1>
+					</h2>
 					<button className='rounded-3xl bg-red-600 py-3 px-10 mt-8'>
 						Browse Store
 					</button>
