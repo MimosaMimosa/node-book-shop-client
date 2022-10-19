@@ -1,11 +1,10 @@
 import SearchIcon from "@mui/icons-material/Search";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import AuthContext from "../../store/Context/AuthContext";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import axios from "axios";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
@@ -15,8 +14,8 @@ const Navbar = () => {
 	const { data } = useContext(AuthContext);
 
 	return (
-		<div>
-			<div className='flex container justify-between items-center'>
+		<div className="container">
+			<div className='flex justify-between items-center'>
 				<div className='flex items-center'>
 					<h1 className='mr-4'>
 						<img src='./assets/image/logo.webp' alt='' />
@@ -69,13 +68,15 @@ const Navbar = () => {
 			<nav className='navbar bg-pink-soft'>
 				<ul className='flex justify-center p-3'>
 					<li className='mx-5 text-lg'>
-						<span className='cursor-pointer'>Home</span>
+						<Link to='/' className='cursor-pointer hover:text-red-600'>
+							Home
+						</Link>
 					</li>
 					<li className='mx-5 text-lg'>
-						<Link to='/categories'>Category</Link>
+						<Link to='/categories' className="cursor-pointer hover:text-red-600">Category</Link>
 					</li>
 					<li className='mx-5 text-lg'>
-						<span className='cursor-pointer'>About</span>
+						<span className='cursor-pointer hover:text-red-600'>About</span>
 					</li>
 					<li className='mx-5 text-lg'>
 						<Menu
@@ -83,7 +84,7 @@ const Navbar = () => {
 							className='relative inline-block text-left'
 						>
 							<div>
-								<Menu.Button className='inline-flex w-full justify-center rounded-md text-lg  font-medium  shadow-sm focus:outline-none  focus:ring-offset-2 focus:ring-offset-gray-100'>
+								<Menu.Button className='hover:text-red-600 inline-flex w-full justify-center rounded-md text-lg  font-medium  shadow-sm focus:outline-none  focus:ring-offset-2 focus:ring-offset-gray-100'>
 									Pages
 								</Menu.Button>
 							</div>
@@ -165,10 +166,10 @@ const Navbar = () => {
 						</Menu>
 					</li>
 					<li className='mx-5 fw-bold text-lg'>
-						<span className='cursor-pointer'>Blog</span>
+						<span className='cursor-pointer hover:text-red-600'>Blog</span>
 					</li>
 					<li className='mx-5 fw-bold text-lg'>
-						<span className='cursor-pointer'>Contact</span>
+						<span className='cursor-pointer hover:text-red-600'>Contact</span>
 					</li>
 				</ul>
 			</nav>
