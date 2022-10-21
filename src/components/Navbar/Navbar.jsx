@@ -191,11 +191,11 @@ const Navbar = () => {
 							Blog
 						</span>
 					</li>
-					<li className='mx-5 fw-bold text-lg'>
+					<Link to='/contact' className='mx-5 fw-bold text-lg'>
 						<span className='cursor-pointer hover:text-red-600'>
 							Contact
 						</span>
-					</li>
+					</Link>
 				</ul>
 			</nav>
 		</div>

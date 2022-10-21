@@ -14,6 +14,7 @@ import Category from "./pages/Category/Category";
 import Root from "./pages/Root";
 import BookDetails from "./pages/BookDetails/BookDetails";
 import Order from "./pages/Order/Order";
+import Contact from "./pages/Contact/Contact";
 
 function App() {
 	const router = createBrowserRouter(
@@ -25,6 +26,7 @@ function App() {
 					<Route path='/categories' element={<Category />}></Route>
 					<Route path='/about' element={<About />}></Route>
 					<Route path='/orders' element={<Order />}></Route>
+					<Route path='/contact' element={<Contact />}></Route>
 				</Route>
 				<Route path='/login' element={<Login />}></Route>
 				<Route path='/sign-up' element={<SignUp />}></Route>
