@@ -13,8 +13,8 @@ const BestSeller = () => {
 
 	return (
 		<div className='bg-pink-soft'>
-			<div className='container'>
-				<h2 className='text-3xl text-center font-bold p-5'>
+			<div className='container p-10'>
+				<h2 className='text-3xl text-center font-bold pb-4'>
 					Best Selling Book Ever
 				</h2>
 				<div className='mt-3'>
@@ -22,9 +22,11 @@ const BestSeller = () => {
 						{books.map((book) => (
 							<Fragment key={book._id}>
 								<BookCard
+									id={book._id}
 									src={book.photo[0].url}
 									name={book.name}
 									author={book.author.name}
+									price={book.price}
 								/>
 							</Fragment>
 						))}

@@ -1,11 +1,12 @@
-import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
-import StarHalfOutlinedIcon from '@mui/icons-material/StarHalfOutlined';
-const BookCard = ({src,name,author}) => {
+import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
+import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";
+import { Link } from "react-router-dom";
+const BookCard = ({ id, src, name, author, price }) => {
 	return (
-		<div>
-			<div className='border-2'>
+		<>
+			<Link to={`/books/${id}`} className='border-2 cursor-pointer block'>
 				<img
-					src={src}
+					src={`${process.env.REACT_APP_API_URL}/${src}`}
 					alt='book'
 					className='w-[100%]'
 				/>
@@ -26,13 +27,13 @@ const BookCard = ({src,name,author}) => {
 						</div>
 						<div>
 							<span className='text-red-500 text-xl font-bold'>
-								$50
+							$<span>{price.toFixed(2)}</span>
 							</span>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			</Link>
+		</>
 	);
 };
 

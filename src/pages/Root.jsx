@@ -1,18 +1,18 @@
-
-import { Outlet } from "react-router-dom"
-import Footer from "../components/Footer/Footer"
-import Navbar from "../components/Navbar/Navbar"
-import NewLetter from "../components/NewLetter/NewLetter"
+import { Outlet } from "react-router-dom";
+import Footer from "../components/Footer/Footer";
+import Navbar from "../components/Navbar/Navbar";
+import NewLetter from "../components/NewLetter/NewLetter";
+import ScrollToTop from "../components/Scroll/ScrollToTop";
 
 const Root = () => {
-  return (
-    <div>
-        <Navbar/>
-        <Outlet/>
-        <NewLetter/>
-        <Footer/>
-    </div>
-  )
-}
+	return (
+		<ScrollToTop>
+			<Navbar />
+			<Outlet />
+			<NewLetter />
+			<Footer />
+		</ScrollToTop>
+	);
+};
 
-export default Root
+export default Root;

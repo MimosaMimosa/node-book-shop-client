@@ -6,7 +6,7 @@ import FilterRadioGroup from "../../components/Filter/FilterRadioGroup";
 
 const Category = () => {
 	const API_URL = process.env.REACT_APP_API_URL;
-	const pageBanner = useMemo(() => <PageBanner />, []);
+	const pageBanner = useMemo(() => <PageBanner title="Book Category" />, []);
 	const [lists, setLists] = useState([]);
 	const [books, setBooks] = useState([]);
 	const booksRoute = `${API_URL}/api/v1/books`;
@@ -50,6 +50,9 @@ const Category = () => {
 			)
 			.then((res) => {
 				setBooks(res.data);
+			})
+			.catch((error) => {
+				console.log(error);
 			});
 
 		return () => {
@@ -61,7 +64,7 @@ const Category = () => {
 		<>
 			{pageBanner}
 			<div className='flex container mt-10 justify-between'>
-				<div className='w-[33.3333333333%]'>
+				<div className='w-[33.3333333333%] self-stretch'>
 					<div className='border-2 border-gray-100 p-10'>
 						<div className='mb-5'>
 							<FilterRadioGroup
@@ -87,13 +90,15 @@ const Category = () => {
 							Browse by popularity
 						</div>
 					</div>
-					<div className='grid grid-cols-4 gap-4'>
+					<div className='grid grid-cols-3 gap-4'>
 						{books.map((book) => (
 							<Fragment key={book._id}>
 								<BookCard
+									id={book._id}
 									src={book.photo[0].url}
 									name={book.name}
 									author={book.author.name}
+									price={book.price}
 								/>
 							</Fragment>
 						))}
