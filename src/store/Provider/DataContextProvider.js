@@ -10,11 +10,11 @@ const reducer = (state, action) => {
 		case "STORE_AUTHORS":
 			return { ...state, authors: [...action.data] };
 		case "STORE_ORDERS":
-			return { ...state, orders: [...state.orders, ...action.data] };
+			return { ...state, orders: [...action.data] };
 		case "PLUS_ORDERS":
-			return { ...state, orders: [...state.orders, action.data] };
+			return { ...state, orders: [...action.data] };
 		case "MINUS_ORDERS":
-			return { ...state, orders: action.data };
+			return { ...state, orders: [...action.data] };
 		default:
 			return state;
 	}

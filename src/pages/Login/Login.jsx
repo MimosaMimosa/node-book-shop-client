@@ -1,31 +1,44 @@
 import axios from "axios";
-import { useContext, useState } from "react";
-import AuthContext from "../../store/Context/AuthContext";
-import {toast } from 'react-toastify';
-import {Link, useNavigate} from 'react-router-dom'
-import Cookies from 'js-cookie'
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Login = () => {
-    const navigate = useNavigate()
+	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const { dispatch } = useContext(AuthContext);
+	const [errors,setErrors] = useState({});
+
+	useEffect(() => {
+		const { user } = JSON.parse(Cookies.get("node_book_shop") || "{}");
+		if (user) {
+			navigate("/");
+		}
+		// eslint-disable-next-line
+	}, []);
 
 	const handleSubmit = (e) => {
-        e.preventDefault();
+		e.preventDefault();
+		setErrors({})
 		axios
 			.post("http://localhost:4000/api/v1/auth/login", {
 				email,
 				password,
 			})
 			.then((res) => {
-				dispatch({ type: "STORE", data: res.data });
-				Cookies.set('node_book_shop',JSON.stringify(res.data),{ expires: 3 })
-                toast.success('Login Success');
-                navigate('/')
-			}).catch((error) => {
-                console.log(error)
-            });
+				Cookies.set("node_book_shop", JSON.stringify(res.data), {
+					expires: 3,
+				});
+				toast.success("Login Success");
+				navigate(window.wantedUrl || "/");
+			})
+			.catch((error) => {
+				const data =error.response.data
+				if(data){
+					setErrors(data)
+				}
+			});
 	};
 
 	return (
@@ -36,9 +49,13 @@ const Login = () => {
 					Enter Login details to get access
 				</h3>
 				<div className='flex justify-center'>
-					<form action='' className='w-[90%]' onSubmit={(e)=>{
-                        handleSubmit(e)
-                    }}>
+					<form
+						autoComplete='off'
+						className='w-[90%]'
+						onSubmit={(e) => {
+							handleSubmit(e);
+						}}
+					>
 						<label className='mt-8 block' htmlFor='email'>
 							<label htmlFor='email' className='text-md'>
 								Username Or Email Address
@@ -52,6 +69,7 @@ const Login = () => {
 									onChange={(e) => setEmail(e.target.value)}
 								/>
 							</div>
+							<div className="text-red-600 font-bold capitalize mt-1 text-xs">{errors.email || null}.</div>
 						</label>
 						<label className='mt-8 block' htmlFor='password'>
 							<label htmlFor='password' className='text-md'>
@@ -63,9 +81,12 @@ const Login = () => {
 									type='password'
 									className='outline-none border-0 focus:ring-0 w-full p-0'
 									placeholder='Password'
-                                    onChange={(e) => setPassword(e.target.value)}
+									onChange={(e) =>
+										setPassword(e.target.value)
+									}
 								/>
 							</div>
+							<div className="text-red-600 font-bold capitalize mt-1 text-xs">{errors.password || null}.</div>
 						</label>
 						<div className='mt-8 flex justify-between'>
 							<div className='flex'>
@@ -84,7 +105,12 @@ const Login = () => {
 						<div className='mt-8 flex justify-between items-center'>
 							<div className='flex'>
 								Don’t have an account?
-								<Link to="/sign-up" className='text-red-600 mx-2'>Sign Up</Link>
+								<Link
+									to='/sign-up'
+									className='text-red-600 mx-2'
+								>
+									Sign Up
+								</Link>
 								here
 							</div>
 							<div>

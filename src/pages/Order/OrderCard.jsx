@@ -9,10 +9,23 @@ const OrderCard = ({ book }) => {
         let newOrder = [...orders];
         let index = newOrder.findIndex(order => order._id  === book._id);
         if(index !== -1){
-            newOrder.splice(index,1);
+            if(newOrder[index].qty === 1) {
+				newOrder.splice(index,1);
+			}else{
+				newOrder[index].qty  -= 1;
+			}
         }
         dispatch({ type: "MINUS_ORDERS", data: newOrder });
     }
+
+	const handlePlus = (orders,book) => {
+		let newOrder = [...orders];
+        let found = newOrder.find(order => order._id  === book._id);
+		if(found){
+			found.qty += 1;
+		}
+        dispatch({ type: "PLUS_ORDERS", data: newOrder });
+	}
 	return (
 		<div className='flex items-center mt-5'>
 			<div className='w-[60%] flex items-center'>
@@ -28,7 +41,7 @@ const OrderCard = ({ book }) => {
 			<div className='w-[15%]'>
 				$<span>{book.price.toFixed(2)}</span>
 			</div>
-			<div className='w-[15%]'>
+			<div className='w-[10%]'>
 				<div className='flex'>
 					<div className='border self-stretch px-4 flex items-center'>
 						{book.qty}
@@ -37,7 +50,7 @@ const OrderCard = ({ book }) => {
 						<button
 							className='block border text-xl px-3'
 							onClick={() => {
-								dispatch({ type: "PLUS_ORDERS", data: book });
+								handlePlus(state.orders,book);
 							}}
 						>
 							+
@@ -53,7 +66,7 @@ const OrderCard = ({ book }) => {
 					</div>
 				</div>
 			</div>
-			<div className='w-[10%]'>
+			<div className='w-[15%] text-end'>
 				$<span>{(book.price * book.qty).toFixed(2)}</span>
 			</div>
 		</div>
