@@ -185,6 +185,13 @@ const Footer = () => {
 				</a>
 				|
 				<a
+					href='https://github.com/KyiMyatNoeSoe7'
+					className='mx-2 text-red-600'
+				>
+					Chan
+				</a>
+				|
+				<a
 					href='https://github.com/WaiYanLin71'
 					className='mx-2 text-red-600'
 				>

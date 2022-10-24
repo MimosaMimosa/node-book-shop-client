@@ -34,6 +34,7 @@ const Login = () => {
 				navigate(window.wantedUrl || "/");
 			})
 			.catch((error) => {
+				console.log(error)
 				const data =error.response.data
 				if(data){
 					setErrors(data)
