@@ -13,8 +13,8 @@ const reducer = (state, action) => {
 };
 
 const AuthContextProvider = ({ children }) => {
-	const [state, dispatch] = useReducer(reducer, {});
-
+	const authUser = {};
+	const [state, dispatch] = useReducer(reducer, authUser);
 	const data = {
 		state,
 		dispatch,

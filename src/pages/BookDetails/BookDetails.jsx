@@ -1,37 +1,66 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";
 import ShareIcon from "@mui/icons-material/Share";
 import DataContext from "../../store/Context/DataContext";
 import AlertModal from "../../components/Modal/AlertModal";
+import Cookies from "js-cookie";
 
 const BookDetails = () => {
 	const params = useParams();
 	const [book, setBook] = useState({});
-	const { dispatch } = useContext(DataContext);
+	const { state, dispatch } = useContext(DataContext);
 	const [open, setOpen] = useState(false);
+	const navigate = useNavigate();
 
 	const handleModal = (show) => {
 		setOpen(show);
 	};
 
 	const handleAction = () => {
+		let orders = [...state.orders];
+		let found = orders.find((order) => order._id === book._id);
+		if (found) {
+			found.qty += 1;
+		} else {
+			orders.push({ ...book, qty: 1 });
+		}
+
 		dispatch({
 			type: "STORE_ORDERS",
-			data: [{ ...book, qty: 1 }],
+			data: orders,
 		});
+
 		setOpen(false);
 	};
 
 	useEffect(() => {
-		axios
-			.get(`${process.env.REACT_APP_API_URL}/api/v1/books/${params.id}`)
-			.then((res) => {
+		const getBook = async (id) => {
+			try {
+				const { token } = JSON.parse(
+					Cookies.get("node_book_shop") || "{}"
+				);
+				const res = await axios(
+					`${process.env.REACT_APP_API_URL}/api/v1/books/${id}`,
+					{
+						headers: {
+							authorization: `$1|${token}`,
+						},
+					}
+				);
 				setBook(res.data);
-			});
-	}, [params.id]);
+			} catch (error) {
+				if (error.code === "ERR_BAD_REQUEST") {
+					Cookies.remove("node_book_shop");
+					navigate("/login");
+				}
+				navigate("/login");
+			}
+		};
+		getBook(params.id);
+	}, [params.id, navigate]);
 
 	return (
 		<>
@@ -40,6 +69,9 @@ const BookDetails = () => {
 				handleModal={handleModal}
 				handleAction={handleAction}
 			/>
+			{/* <ModalPortal>
+				<RatingModal/>
+			</ModalPortal> */}
 			{Object.keys(book).length ? (
 				<>
 					<div className='container'>
