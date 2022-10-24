@@ -12,6 +12,8 @@ const PageBanner = ({title}) => {
         case '/orders':
             image = './assets/image/xh2_hero2.jpg.pagespeed.ic.uw-cq9l-93.webp'
         break;
+        default:
+            image = './assets/image/xh2_hero2.jpg.pagespeed.ic.uw-cq9l-93.webp'
     }
     
     const banner = {
