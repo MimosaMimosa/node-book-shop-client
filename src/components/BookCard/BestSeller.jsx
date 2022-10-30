@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -35,7 +35,7 @@ const BestSeller = () => {
 							<SwiperSlide key={book._id}>
 								<BookCard
 									id={book._id}
-									src={book.photo[0].url}
+									src={book.image[0].url}
 									name={book.name}
 									author={book.author.name}
 									price={book.price}

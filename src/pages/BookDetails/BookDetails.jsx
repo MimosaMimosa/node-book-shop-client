@@ -39,23 +39,20 @@ const BookDetails = () => {
 	useEffect(() => {
 		const getBook = async (id) => {
 			try {
-				const { token } = JSON.parse(
+				const { user } = JSON.parse(
 					Cookies.get("node_book_shop") || "{}"
 				);
 				const res = await axios(
 					`${process.env.REACT_APP_API_URL}/api/v1/books/${id}`,
 					{
 						headers: {
-							authorization: `$1|${token}`,
+							authorization: `$1|${user.token}`,
 						},
 					}
 				);
 				setBook(res.data);
 			} catch (error) {
-				if (error.code === "ERR_BAD_REQUEST") {
-					Cookies.remove("node_book_shop");
-					navigate("/login");
-				}
+				Cookies.remove("node_book_shop");
 				navigate("/login");
 			}
 		};
@@ -79,7 +76,7 @@ const BookDetails = () => {
 							<div className='flex items-center'>
 								<div>
 									<img
-										src={`${process.env.REACT_APP_API_URL}/${book.photo[0]?.url}`}
+										src={`${process.env.REACT_APP_API_URL}/${book.image[0].url}`}
 										alt={book.name}
 										className='object-contain h-[427px]'
 									/>

@@ -3,15 +3,15 @@ import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";
 import { Link } from "react-router-dom";
 const BookCard = ({ id, src, name, author, price }) => {
 	return (
-		<>
+		<>	
 			<Link to={`/books/${id}`} className='border-2 cursor-pointer block'>
 				<img
 					src={`${process.env.REACT_APP_API_URL}/${src}`}
 					alt='book'
-					className='w-[100%]'
+					className='w-[100%] h-[380px] object-cover' 
 				/>
-				<div className='px-3 py-5 bg-white'>
-					<span className='block'>{name}</span>
+				<div className='px-3 py-7 bg-white'>
+					<span className='block'>{name.length > 20 ? name.substr(0,20) + '...' :name}</span>
 					<span className='text-gray-400 mt-1 block'>{author}</span>
 					<div className='flex justify-between items-center'>
 						<div className='mt-1'>

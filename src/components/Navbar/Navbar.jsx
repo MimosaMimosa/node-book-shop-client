@@ -26,6 +26,7 @@ const Navbar = () => {
 					</li>
 					<li className='mx-5 text-lg'>
 						<Link
+							preventScrollReset={true}
 							to='/categories'
 							className='cursor-pointer hover:text-red-600'
 						>

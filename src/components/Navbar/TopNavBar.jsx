@@ -31,25 +31,31 @@ const TopNavBar = () => {
 	}, [data.orders]);
 
 	const handleLogout = () => {
-		setOpen(true)
+		setOpen(true);
 	};
 
 	const handleAction = () => {
 		setOpen(false);
-		Cookies.remove('node_book_shop');
-		dispatch({type:'STORE',data:{}});
-		navigate('/')
-	}
+		Cookies.remove("node_book_shop");
+		dispatch({ type: "STORE", data: {} });
+		navigate("/");
+	};
 
 	return (
 		<div className='flex justify-between items-center'>
 			<ModalPortal>
-				<LogoutModal show={open} setShow={setOpen} handleAction={handleAction}/>
+				<LogoutModal
+					show={open}
+					setShow={setOpen}
+					handleAction={handleAction}
+				/>
 			</ModalPortal>
 			<div className='flex items-center'>
-				<h1 className='mr-4'>
-					<img src='./assets/image/logo.webp' alt='logo' />
-				</h1>
+				<Link to="/">
+					<h1 className='mr-4 cursor-pointer'>
+						<img src='./assets/image/logo.webp' alt='logo' />
+					</h1>
+				</Link>
 				<div className='bg-white p-3'>
 					<div className='flex w-[350px] justify-between items-center rounded-3xl p-1 border-3xl border'>
 						<input

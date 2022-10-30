@@ -32,7 +32,7 @@ const OrderCard = ({ book }) => {
 				<img
 					className='object-contain w-[200px]'
 					alt={book.name}
-					src={`${process.env.REACT_APP_API_URL}/${book.photo[0].url}`}
+					src={`${process.env.REACT_APP_API_URL}/${book.image[0].url}`}
 				/>
 				<span className='ml-10 text-xl font-[200]'>
 					Minimalistic shop for multipurpose use

@@ -15,9 +15,9 @@ import Root from "./pages/Root";
 import BookDetails from "./pages/BookDetails/BookDetails";
 import Order from "./pages/Order/Order";
 import Contact from "./pages/Contact/Contact";
-import AuthMiddleWare from "./middleware/route/AuthMiddleWare";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Blog from "./pages/Blog/Blog";
+import PrivateRoutes from "./middleware/PrivateRoutes";
 
 function App() {
 	const router = createBrowserRouter(
@@ -25,7 +25,7 @@ function App() {
 			<Fragment>
 				<Route path='/' element={<Root />}>
 					<Route index element={<Home />}></Route>
-					<Route element={<AuthMiddleWare />}>
+					<Route element={<PrivateRoutes/>}>
 						<Route
 							path='/books/:id'
 							element={<BookDetails />}

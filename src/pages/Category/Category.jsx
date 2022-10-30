@@ -1,49 +1,47 @@
 import axios from "axios";
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import PageBanner from "../../components/Bannder/PageBanner";
 import BookCard from "../../components/BookCard/BookCard";
 import FilterRadioGroup from "../../components/Filter/FilterRadioGroup";
 
 const Category = () => {
-	const API_URL = process.env.REACT_APP_API_URL;
 	const pageBanner = useMemo(() => <PageBanner title="Book Category" />, []);
 	const [lists, setLists] = useState([]);
 	const [books, setBooks] = useState([]);
-	const booksRoute = `${API_URL}/api/v1/books`;
-	const [search, setSearch] = useState({
-		route: booksRoute,
-		category: "",
-		author: "",
-	});
+	const [searchParams,setSearchParams] = useSearchParams({
+		category:'',
+		author:'',
+	})
+
+	const location = useLocation();
 
 	const handleCategoryChange = (value) => {
-		setSearch((prev) => {
-			return { ...prev, category: value };
-		});
+		setSearchParams((prev)=>{
+			return {...prev,category:value}
+		})
 	};
 
 	const handleAuthorChange = (value) => {
-		setSearch((prev) => {
-			return { ...prev, author: value };
-		});
+	
 	};
 
 	useEffect(() => {
 		Promise.all([
-			axios.get(`${API_URL}/api/v1/categories`),
-			axios.get(`${API_URL}/api/v1/authors`),
+			axios.get(`${process.env.REACT_APP_API_URL}/api/v1/categories`),
+			axios.get(`${process.env.REACT_APP_API_URL}/api/v1/authors`),
 		]).then((res) => {
 			setLists(() => {
 				return res.map((result) => result.data);
 			});
 		});
-	}, [API_URL]);
+	}, []);
 
 	useEffect(() => {
 		const source = axios.CancelToken.source();
 		axios
 			.get(
-				`${search.route}?category=${search.category}&author=${search.author}`,
+				`${process.env.REACT_APP_API_URL}/api/v1/books${location.search}`,
 				{
 					cancelToken: source.token,
 				}
@@ -58,7 +56,7 @@ const Category = () => {
 		return () => {
 			source.cancel();
 		};
-	}, [search.route, search.category, search.author]);
+	}, [location.search]);
 
 	return (
 		<>
@@ -74,14 +72,14 @@ const Category = () => {
 								title='Filter by Genres'
 							/>
 						</div>
-						<div className='mb-5'>
+						{/* <div className='mb-5'>
 							<FilterRadioGroup
 								handleChange={handleAuthorChange}
 								lists={lists}
 								index={1}
 								title='Filter by Author Name'
 							/>
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<div className='w-[64.6667%]'>
@@ -95,7 +93,7 @@ const Category = () => {
 							<Fragment key={book._id}>
 								<BookCard
 									id={book._id}
-									src={book.photo[0].url}
+									src={book.image[0].url}
 									name={book.name}
 									author={book.author.name}
 									price={book.price}

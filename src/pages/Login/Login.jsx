@@ -1,26 +1,22 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import ModalPortal from "../../components/Modal/ModalPortal";
+import EmailVerifyModal from "../../components/Modal/EmailVerifyModal";
 
 const Login = () => {
 	const navigate = useNavigate();
+	const [show, setShow] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [errors,setErrors] = useState({});
-
-	useEffect(() => {
-		const { user } = JSON.parse(Cookies.get("node_book_shop") || "{}");
-		if (user) {
-			navigate("/");
-		}
-		// eslint-disable-next-line
-	}, []);
+	const [errors, setErrors] = useState({});
+	const location = useLocation();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setErrors({})
+		setErrors({});
 		axios
 			.post("http://localhost:4000/api/v1/auth/login", {
 				email,
@@ -31,102 +27,139 @@ const Login = () => {
 					expires: 3,
 				});
 				toast.success("Login Success");
-				navigate(window.wantedUrl || "/");
+				navigate(location.state?.from?.pathname || "/");
 			})
 			.catch((error) => {
-				console.log(error)
-				const data =error.response.data
-				if(data){
-					setErrors(data)
+				const data = error.response.data;
+
+				if (error.response.status === 401) {
+					setShow(true);
+				}
+
+				if (error.response.status === 422) {
+					setErrors(data);
 				}
 			});
 	};
 
+	const handleAction = () => {
+		axios
+			.post(
+				`${process.env.REACT_APP_API_URL}/api/v1/token/email-verification`,
+				{
+					email,
+				}
+			)
+			.then((res) => {
+				setShow(false);
+				toast.success("Please check your email for verification link.");
+			})
+			.catch((error) => {
+				setShow(false);
+				toast.error("Fails!. Resend verification link.");
+			});
+	};
+
 	return (
-		<div className='h-[100vh] flex justify-center items-center py-5'>
-			<div className='w-[50%] shadow-xl py-7'>
-				<h2 className='text-3xl font-bold text-center'>Login</h2>
-				<h3 className='text-sm text-center mt-5 font-thin'>
-					Enter Login details to get access
-				</h3>
-				<div className='flex justify-center'>
-					<form
-						autoComplete='off'
-						className='w-[90%]'
-						onSubmit={(e) => {
-							handleSubmit(e);
-						}}
-					>
-						<label className='mt-8 block' htmlFor='email'>
-							<label htmlFor='email' className='text-md'>
-								Username Or Email Address
+		<>
+			<ModalPortal>
+				<EmailVerifyModal
+					show={show}
+					setShow={setShow}
+					handleAction={handleAction}
+				/>
+			</ModalPortal>
+			<div className='h-[100vh] flex justify-center items-center py-5'>
+				<div className='w-[50%] shadow-xl py-7'>
+					<h2 className='text-3xl font-bold text-center'>Login</h2>
+					<h3 className='text-sm text-center mt-5 font-thin'>
+						Enter Login details to get access
+					</h3>
+					<div className='flex justify-center'>
+						<form
+							autoComplete='off'
+							className='w-[90%]'
+							onSubmit={(e) => {
+								handleSubmit(e);
+							}}
+						>
+							<label className='mt-8 block' htmlFor='email'>
+								<label htmlFor='email' className='text-md'>
+									Username Or Email Address
+								</label>
+								<div className='border-2 border-gray-3 px-5 py-3 mt-1'>
+									<input
+										id='email'
+										type='text'
+										className='outline-none border-0 focus:ring-0 w-full p-0'
+										placeholder='Username / Email Address'
+										onChange={(e) =>
+											setEmail(e.target.value)
+										}
+									/>
+								</div>
+								<div className='text-red-600 capitalize mt-1 text-xs'>
+									{errors.email || null}.
+								</div>
 							</label>
-							<div className='border-2 border-gray-3 px-5 py-3 mt-1'>
-								<input
-									id='email'
-									type='text'
-									className='outline-none border-0 focus:ring-0 w-full p-0'
-									placeholder='Username / Email Address'
-									onChange={(e) => setEmail(e.target.value)}
-								/>
-							</div>
-							<div className="text-red-600 font-bold capitalize mt-1 text-xs">{errors.email || null}.</div>
-						</label>
-						<label className='mt-8 block' htmlFor='password'>
-							<label htmlFor='password' className='text-md'>
-								Password
+							<label className='mt-8 block' htmlFor='password'>
+								<label htmlFor='password' className='text-md'>
+									Password
+								</label>
+								<div className='border-2 border-gray-3 px-5 py-3 mt-1'>
+									<input
+										id='password'
+										type='password'
+										className='outline-none border-0 focus:ring-0 w-full p-0'
+										placeholder='Password'
+										onChange={(e) =>
+											setPassword(e.target.value)
+										}
+									/>
+								</div>
+								<div className='text-red-600 capitalize mt-1 text-xs'>
+									{errors.password || null}.
+								</div>
 							</label>
-							<div className='border-2 border-gray-3 px-5 py-3 mt-1'>
-								<input
-									id='password'
-									type='password'
-									className='outline-none border-0 focus:ring-0 w-full p-0'
-									placeholder='Password'
-									onChange={(e) =>
-										setPassword(e.target.value)
-									}
-								/>
+							<div className='mt-8 flex justify-between'>
+								<div className='flex items-center'>
+									<input
+										type='checkbox'
+										className='checked:bg-red-600 mr-2'
+									/>
+									Keep Me Logged In
+								</div>
+								<div>
+									<span className='text-red-600'>
+										Forgot Password?
+									</span>
+								</div>
 							</div>
-							<div className="text-red-600 font-bold capitalize mt-1 text-xs">{errors.password || null}.</div>
-						</label>
-						<div className='mt-8 flex justify-between'>
-							<div className='flex'>
-								<input
-									type='checkbox'
-									className='checked:bg-red-600 mr-2'
-								/>
-								Keep Me Logged In
+							<div className='mt-8 flex justify-between items-center'>
+								<div className='flex'>
+									Don’t have an account?
+									<Link
+										to='/sign-up'
+										className='text-red-600 mx-2'
+									>
+										Sign Up
+									</Link>
+									here
+								</div>
+								<div>
+									<button
+										type='submit'
+										className='bg-red-600 py-5 px-10 text-white'
+									>
+										Login
+									</button>
+								</div>
 							</div>
-							<div>
-								<span className='text-red-600'>
-									Forgot Password?
-								</span>
-							</div>
-						</div>
-						<div className='mt-8 flex justify-between items-center'>
-							<div className='flex'>
-								Don’t have an account?
-								<Link
-									to='/sign-up'
-									className='text-red-600 mx-2'
-								>
-									Sign Up
-								</Link>
-								here
-							</div>
-							<div>
-								<button
-									type='submit'
-									className='bg-red-600 py-5 px-10 text-white'
-								>
-									Login
-								</button>
-							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 
