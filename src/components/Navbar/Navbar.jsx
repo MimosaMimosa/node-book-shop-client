@@ -125,12 +125,18 @@ const Navbar = () => {
 						</Menu>
 					</li>
 					<li className='mx-5 fw-bold text-lg'>
-						<span className='cursor-pointer hover:text-red-600'>
-							Blog
-						</span>
+					<Link
+							to='/blog'
+							className='cursor-pointer hover:text-red-600'
+						>
+							<span className='cursor-pointer hover:text-red-600'>
+								Blog
+							</span>
+						</Link>
+						
 					</li>
 					<Link to='/contact' className='mx-5 fw-bold text-lg'>
-						<span className='cursor-pointer hover:text-red-600'>
+						<span className='cu/categoriesrsor-pointer hover:text-red-600'>
 							Contact
 						</span>
 					</Link>
