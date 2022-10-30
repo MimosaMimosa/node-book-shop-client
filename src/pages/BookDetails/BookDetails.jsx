@@ -46,7 +46,7 @@ const BookDetails = () => {
 					`${process.env.REACT_APP_API_URL}/api/v1/books/${id}`,
 					{
 						headers: {
-							authorization: `$1|${user.token}`,
+							authorization: `$1|${user?.token}`,
 						},
 					}
 				);
