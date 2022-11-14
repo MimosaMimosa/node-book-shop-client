@@ -18,6 +18,7 @@ import Contact from "./pages/Contact/Contact";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Blog from "./pages/Blog/Blog";
 import PrivateRoutes from "./middleware/PrivateRoutes";
+import Author from "./pages/Author/Author";
 
 function App() {
 	const router = createBrowserRouter(
@@ -25,7 +26,7 @@ function App() {
 			<Fragment>
 				<Route path='/' element={<Root />}>
 					<Route index element={<Home />}></Route>
-					<Route element={<PrivateRoutes/>}>
+					<Route element={<PrivateRoutes />}>
 						<Route
 							path='/books/:id'
 							element={<BookDetails />}
@@ -36,6 +37,7 @@ function App() {
 					<Route path='/orders' element={<Order />}></Route>
 					<Route path='/contact' element={<Contact />}></Route>
 					<Route path='/blog' element={<Blog />}></Route>
+					<Route path='authors' element={<Author />}></Route>
 				</Route>
 				<Route path='/login' element={<Login />}></Route>
 				<Route path='/sign-up' element={<SignUp />}></Route>

@@ -9,9 +9,15 @@ const BestSeller = () => {
 	const [books, setBooks] = useState([]);
 	useEffect(() => {
 		const API_URL = process.env.REACT_APP_API_URL;
-		axios.get(`${API_URL}/api/v1/books`).then((res) => {
-			setBooks(res.data);
-		});
+		axios
+			.get(`${API_URL}/api/v1/books`)
+			.then((res) => {
+				console.log(res.data);
+				setBooks(res.data.books);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}, []);
 
 	return (

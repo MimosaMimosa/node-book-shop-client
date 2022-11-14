@@ -3,12 +3,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import ModalPortal from "../../components/Modal/ModalPortal";
-import EmailVerifyModal from "../../components/Modal/EmailVerifyModal";
 
 const Login = () => {
 	const navigate = useNavigate();
-	const [show, setShow] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState({});
@@ -31,44 +28,14 @@ const Login = () => {
 			})
 			.catch((error) => {
 				const data = error.response.data;
-
-				if (error.response.status === 401) {
-					setShow(true);
-				}
-
 				if (error.response.status === 422) {
 					setErrors(data);
 				}
 			});
 	};
 
-	const handleAction = () => {
-		axios
-			.post(
-				`${process.env.REACT_APP_API_URL}/api/v1/token/email-verification`,
-				{
-					email,
-				}
-			)
-			.then((res) => {
-				setShow(false);
-				toast.success("Please check your email for verification link.");
-			})
-			.catch((error) => {
-				setShow(false);
-				toast.error("Fails!. Resend verification link.");
-			});
-	};
-
 	return (
 		<>
-			<ModalPortal>
-				<EmailVerifyModal
-					show={show}
-					setShow={setShow}
-					handleAction={handleAction}
-				/>
-			</ModalPortal>
 			<div className='h-[100vh] flex justify-center items-center py-5'>
 				<div className='w-[50%] shadow-xl py-7'>
 					<h2 className='text-3xl font-bold text-center'>Login</h2>

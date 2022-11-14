@@ -6,7 +6,7 @@ const BookCard = ({ id, src, name, author, price }) => {
 		<>	
 			<Link to={`/books/${id}`} className='border-2 cursor-pointer block'>
 				<img
-					src={`${process.env.REACT_APP_API_URL}/${src}`}
+					src={src}
 					alt='book'
 					className='w-[100%] h-[380px] object-cover' 
 				/>

@@ -50,7 +50,7 @@ const BookDetails = () => {
 						},
 					}
 				);
-				setBook(res.data);
+				setBook(res.data.book);
 			} catch (error) {
 				Cookies.remove("node_book_shop");
 				navigate("/login");
@@ -76,7 +76,7 @@ const BookDetails = () => {
 							<div className='flex items-center'>
 								<div>
 									<img
-										src={`${process.env.REACT_APP_API_URL}/${book.image[0].url}`}
+										src={book.image[0].url}
 										alt={book.name}
 										className='object-contain h-[427px]'
 									/>
