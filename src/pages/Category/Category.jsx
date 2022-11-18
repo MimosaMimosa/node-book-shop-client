@@ -1,13 +1,14 @@
 import axios from "axios";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState } from "react";
 import PageBanner from "../../components/Bannder/PageBanner";
-import BookCard from "../../components/BookCard/BookCard";
+import FilterBook from "../../components/Filter/FilterBook";
 import FilterRadioGroup from "../../components/Filter/FilterRadioGroup";
+
+
 
 const Category = () => {
 	const pageBanner = useMemo(() => <PageBanner title='Book Category' />, []);
 	const [categories, setCategories] = useState([]);
-	const [books, setBooks] = useState([]);
 	const [authors, setAuthors] = useState([]);
 	const [search, setSearch] = useState({ category: "", author: "" });
 
@@ -26,34 +27,15 @@ const Category = () => {
 	useEffect(() => {
 		Promise.all([
 			axios.get(`${process.env.REACT_APP_API_URL}/api/v1/categories`),
-			axios.get(`${process.env.REACT_APP_API_URL}/api/v1/authors/samples`),
+			axios.get(
+				`${process.env.REACT_APP_API_URL}/api/v1/authors/samples`
+			),
 		]).then((res) => {
 			const [categories, authors] = res;
 			setAuthors(authors.data.authors);
 			setCategories(categories.data.categories);
 		});
 	}, []);
-
-	useEffect(() => {
-		const source = axios.CancelToken.source();
-		axios
-			.get(
-				`${process.env.REACT_APP_API_URL}/api/v1/books?author=${search.author}&category=${search.category}&limit=6`,
-				{
-					cancelToken: source.token,
-				}
-			)
-			.then((res) => {
-				setBooks(res.data.books);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-
-		return () => {
-			source.cancel();
-		};
-	}, [search.category, search.author]);
 
 	return (
 		<>
@@ -83,26 +65,7 @@ const Category = () => {
 							Browse by popularity
 						</div>
 					</div>
-					<div className='grid grid-cols-3 gap-4'>
-						{books.map((book) => (
-							<Fragment key={book._id}>
-								<BookCard
-									id={book._id}
-									src={book.image[0].url}
-									name={book.name}
-									author={book.author.name}
-									price={book.price}
-								/>
-							</Fragment>
-						))}
-					</div>
-					{(books.length || null) && (
-						<div className='flex justify-center'>
-							<button className='mt-10 rounded-[100px] font-bold text-md hover:bg-red-600 hover:text-white border py-4 border-2 border-red-600 text-red-600 px-[50px]'>
-								Browse More
-							</button>
-						</div>
-					)}
+					<FilterBook search={search}/>
 				</div>
 			</div>
 		</>

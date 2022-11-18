@@ -3,7 +3,6 @@ import { useId, useState } from "react";
 const Genres = ({ lists, title, index, handleChange }) => {
 	const defaultId = useId();
 	const [checked, setChecked] = useState(defaultId);
-
 	return (
 		<>
 			<h3 className='font-serif font-bold text-lg'>{title}</h3>
@@ -16,11 +15,11 @@ const Genres = ({ lists, title, index, handleChange }) => {
 						setChecked(defaultId);
 					}}
 					type='radio'
-					className=' w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-transparent dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+					className='cursor-pointer w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-transparent dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
 				/>
 				<label
 					htmlFor={defaultId}
-					className='ml-3 text-md text-gray-900 dark:text-gray-300'
+					className='cursor-pointer ml-3 text-md text-gray-900 dark:text-gray-300'
 				>
 					All
 				</label>

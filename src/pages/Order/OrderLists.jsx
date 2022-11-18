@@ -1,11 +1,13 @@
+import axios from "axios";
 import { Fragment, useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import DataContext from "../../store/Context/DataContext";
 import OrderCard from "./OrderCard";
 
 const OrderLists = () => {
 	const { state } = useContext(DataContext);
 	const [subtotal, setSubtotal] = useState(0);
+	const [address, setAddress] = useState("");
+	const [phone, setPhone] = useState("");
 
 	useEffect(() => {
 		const subTotal = state.orders
@@ -13,6 +15,26 @@ const OrderLists = () => {
 			.reduce((a, b) => a + b, 0);
 		setSubtotal(subTotal);
 	}, [state.orders]);
+
+	const handleOrder = (e) => {
+		e.preventDefault();
+		const data = {
+			detail: state.orders.map((order) => ({
+				book: order._id,
+				qty: order.qty,
+			})),
+			phone,
+			address,
+		};
+		axios
+			.post(`${process.env.REACT_APP_API_URL}/api/v1/orders`, data)
+			.then((res) => {
+				console.log(res.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	return state.orders.length ? (
 		<div className='container mt-10'>
@@ -36,80 +58,31 @@ const OrderLists = () => {
 							${subtotal.toFixed(2)}
 						</h4>
 					</div>
-					<hr className='mt-7' />
-					<div className='flex justify-end mt-7'>
-						<h4 className='w-[10%]'>Shipping</h4>
-						<div className='w-[15%] text-end'>
-							<div className='flex items-center justify-end'>
-								<span>Flat Rate: $5.00</span>
-								<span className='ml-2'>
-									<input
-										type='radio'
-										className='text-red-500 focus:ring-0'
-										defaultChecked
-									/>
-								</span>
-							</div>
-							<div className='flex items-center justify-end mt-3'>
-								<span>Free Shipping</span>
-								<span className='ml-2'>
-									<input
-										type='radio'
-										className='text-red-500 focus:ring-0'
-									/>
-								</span>
-							</div>
-							<div className='flex items-center justify-end mt-3'>
-								<span>Flat Rate: $10.00</span>
-								<span className='ml-2'>
-									<input
-										type='radio'
-										className='text-red-500 focus:ring-0'
-									/>
-								</span>
-							</div>
-							<div className='flex items-center justify-end mt-3'>
-								<span>Local Delivery: $2.00</span>
-								<span className='ml-2'>
-									<input
-										type='radio'
-										className='text-red-500 focus:ring-0'
-									/>
-								</span>
-							</div>
-						</div>
-					</div>
-					<div className='flex justify-end text-md cursor-pointer'>
-						<div className='mt-4'>
-							<div className='rounded-3xl border bg-gray-100 w-[300px] pl-4 py-2'>
-								Yangon
-							</div>
-						</div>
-					</div>
-					<div className='flex justify-end text-md cursor-pointer'>
-						<div className='mt-4'>
-							<div className='rounded-3xl border bg-gray-100 w-[300px] pl-4 py-2'>
-								Select State
-							</div>
-						</div>
-					</div>
-					<div className='flex justify-end text-md cursor-pointer'>
-						<div className='mt-4'>
-							<div className='bg-gray-100 w-[300px] pl-4 py-2'>
-								Select State
-							</div>
-						</div>
-					</div>
-					<div className='text-end'>
-						<button className='rounded-3xl bg-red-600 py-3 px-10 mt-4 text-white'>
-							Update Detail
+					<div className='flex justify-end items-end gap-4 flex-col my-5'>
+						<input
+							type='text'
+							placeholder='Address'
+							value={address}
+							onChange={(e) => {
+								setAddress(e.target.value);
+							}}
+							className='w-[350px] py-2 shadow-sm rounded-3xl focus:border-0 bg-gray-200 ring-0 border-0 focus:ring-0 outline-none'
+						/>
+						<input
+							value={phone}
+							onChange={(e) => {
+								setPhone(e.target.value);
+							}}
+							type='text'
+							placeholder='Phone'
+							className='w-[350px] py-2 shadow-sm rounded-3xl focus:border-0 bg-gray-200 ring-0 border-0 focus:ring-0 outline-none'
+						/>
+						<button
+							className='rounded-3xl bg-red-600 py-3 px-10 mt-4 text-white'
+							onClick={handleOrder}
+						>
+							Confirm Order
 						</button>
-					</div>
-					<hr className='mt-7' />
-					<div className="mt-4">
-						<Link to="/categories" className='rounded-3xl bg-red-600 py-3 px-10 text-white'>
-							Continue Shopping
-						</Link>
 					</div>
 				</>
 			) : null}
