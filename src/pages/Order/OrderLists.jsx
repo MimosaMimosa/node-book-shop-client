@@ -19,9 +19,9 @@ const OrderLists = () => {
 	const handleOrder = (e) => {
 		e.preventDefault();
 		const data = {
-			detail: state.orders.map((order) => ({
+			products: state.orders.map((order) => ({
 				book: order._id,
-				qty: order.qty,
+				quantity: order.qty,
 			})),
 			phone,
 			address,
