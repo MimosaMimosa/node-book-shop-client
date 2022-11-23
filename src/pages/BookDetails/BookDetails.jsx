@@ -7,48 +7,66 @@ import ShareIcon from "@mui/icons-material/Share";
 import DataContext from "../../store/Context/DataContext";
 import AlertModal from "../../components/Modal/AlertModal";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const BookDetails = () => {
 	const params = useParams();
 	const [book, setBook] = useState({});
-	const { state, dispatch } = useContext(DataContext);
+	const { dispatch } = useContext(DataContext);
 	const [open, setOpen] = useState(false);
+	const [loader, setLoader] = useState(false);
 	const navigate = useNavigate();
 
-	const handleModal = (show) => {
-		setOpen(show);
+	/**
+	 * help for code readability	
+	 * @param {callable} cb 
+	 */
+	const responseToClient = (cb) => {
+		setTimeout(() => {
+			setLoader(false);
+			setOpen(false);
+			cb();
+		}, 500);
 	};
 
 	const handleAction = () => {
-		let orders = [...state.orders];
-		let found = orders.find((order) => order._id === book._id);
-		if (found) {
-			found.qty += 1;
-		} else {
-			orders.push({ ...book, qty: 1 });
-		}
+		const data = {
+			user: "6372154d3924352eaf4b4b1a",
+			book: params.id,
+			quantity: 1,
+		};
 
-		dispatch({
-			type: "STORE_ORDERS",
-			data: orders,
-		});
+		setLoader(true);
 
-		setOpen(false);
+		axios
+			.post(`${process.env.REACT_APP_API_URL}/api/v1/carts`, data,{
+				headers:{
+					authorization:`$1|${Cookies.get('abc_token')}`
+				}
+			})
+			.then((res) => {
+				responseToClient(function () {
+					dispatch({
+						type: "STORE_CARTS",
+						data: res.data.cart,
+					});
+				});
+			})
+			.catch((error) => {
+				responseToClient(function () {
+					const status = error.response.status;
+					if (status === 401) {
+						toast.error("You must to login first.");
+					}
+				});
+			});
 	};
 
 	useEffect(() => {
 		const getBook = async (id) => {
 			try {
-				const { user } = JSON.parse(
-					Cookies.get("node_book_shop") || "{}"
-				);
 				const res = await axios(
-					`${process.env.REACT_APP_API_URL}/api/v1/books/${id}`,
-					{
-						headers: {
-							authorization: `$1|${user?.token}`,
-						},
-					}
+					`${process.env.REACT_APP_API_URL}/api/v1/books/${id}`
 				);
 				setBook(res.data.book);
 			} catch (error) {
@@ -62,13 +80,11 @@ const BookDetails = () => {
 	return (
 		<>
 			<AlertModal
-				show={open}
-				handleModal={handleModal}
+				open={open}
+				setOpen={setOpen}
 				handleAction={handleAction}
+				loader={loader}
 			/>
-			{/* <ModalPortal>
-				<RatingModal/>
-			</ModalPortal> */}
 			{Object.keys(book).length ? (
 				<>
 					<div className='container'>

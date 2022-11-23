@@ -13,7 +13,7 @@ import SignUp from "./pages/SignUp/SignUp";
 import Category from "./pages/Category/Category";
 import Root from "./pages/Root";
 import BookDetails from "./pages/BookDetails/BookDetails";
-import Order from "./pages/Order/Order";
+import Cart from "./pages/Order/Cart";
 import Contact from "./pages/Contact/Contact";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Blog from "./pages/Blog/Blog";
@@ -26,15 +26,12 @@ function App() {
 			<Fragment>
 				<Route path='/' element={<Root />}>
 					<Route index element={<Home />}></Route>
-					<Route element={<PrivateRoutes />}>
-						<Route
-							path='/books/:id'
-							element={<BookDetails />}
-						></Route>
-					</Route>
+					<Route path='/books/:id' element={<BookDetails />}></Route>
 					<Route path='/categories' element={<Category />}></Route>
 					<Route path='/about' element={<About />}></Route>
-					<Route path='/orders' element={<Order />}></Route>
+					<Route element={<PrivateRoutes />}>
+						<Route path='/carts' element={<Cart />}></Route>
+					</Route>
 					<Route path='/contact' element={<Contact />}></Route>
 					<Route path='/blog' element={<Blog />}></Route>
 					<Route path='authors' element={<Author />}></Route>

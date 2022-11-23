@@ -1,12 +1,11 @@
 import Cookies from "js-cookie";
-import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const PrivateRoutes = () => {
 	const location = useLocation();
-	const { user } = JSON.parse(Cookies.get("node_book_shop") || "{}");
-	return user?.token ? (
-		<Outlet />
+	const token = Cookies.get("abc_token");
+	return token ? (
+		<Outlet context={token}/>
 	) : (
 		<Navigate to='/login' replace={true} state={{ from: location }} />
 	);

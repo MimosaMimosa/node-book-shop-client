@@ -20,7 +20,11 @@ const Login = () => {
 				password,
 			})
 			.then((res) => {
-				Cookies.set("node_book_shop", JSON.stringify(res.data), {
+				const { user, token } = res.data;
+				Cookies.set("abc_token", token, {
+					expires: 3,
+				});
+				Cookies.set("abc_user", JSON.stringify(user), {
 					expires: 3,
 				});
 				toast.success("Login Success");

@@ -13,6 +13,8 @@ const reducer = (state, action) => {
 			return { ...state, orders: [...action.data] };
 		case "MINUS_ORDERS":
 			return { ...state, orders: [...action.data] };
+		case "STORE_CARTS":
+			return { ...state, carts: action.data };
 		default:
 			return state;
 	}
@@ -23,6 +25,7 @@ const DataContextProvider = ({ children }) => {
 		books: [],
 		orders: [],
 		authors: [],
+		carts: {},
 	});
 	const data = {
 		state,
