@@ -4,61 +4,41 @@ import { useNavigate, useParams } from "react-router-dom";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";
 import ShareIcon from "@mui/icons-material/Share";
-import DataContext from "../../store/Context/DataContext";
 import AlertModal from "../../components/Modal/AlertModal";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { postCarts } from "../../redux/reducer/cartSlice";
 import { toast } from "react-toastify";
 
 const BookDetails = () => {
 	const params = useParams();
 	const [book, setBook] = useState({});
-	const { dispatch } = useContext(DataContext);
 	const [open, setOpen] = useState(false);
-	const [loader, setLoader] = useState(false);
+	const loader = useSelector((state) => state.carts.pending);
 	const navigate = useNavigate();
-
-	/**
-	 * help for code readability	
-	 * @param {callable} cb 
-	 */
-	const responseToClient = (cb) => {
-		setTimeout(() => {
-			setLoader(false);
-			setOpen(false);
-			cb();
-		}, 500);
-	};
+	const dispatch = useDispatch();
 
 	const handleAction = () => {
-		const data = {
-			user: "6372154d3924352eaf4b4b1a",
-			book: params.id,
-			quantity: 1,
-		};
-
-		setLoader(true);
-
-		axios
-			.post(`${process.env.REACT_APP_API_URL}/api/v1/carts`, data,{
-				headers:{
-					authorization:`$1|${Cookies.get('abc_token')}`
+		dispatch(
+			postCarts({
+				url: `${process.env.REACT_APP_API_URL}/api/v1/carts`,
+				data: {
+					book: params.id,
+					quantity: 1,
+				},
+			})
+		)
+			.unwrap()
+			.then(() => {
+				toast.success("success");
+			})
+			.catch(({ response: { status } }) => {
+				if (status === 401) {
+					navigate("/login");
 				}
 			})
-			.then((res) => {
-				responseToClient(function () {
-					dispatch({
-						type: "STORE_CARTS",
-						data: res.data.cart,
-					});
-				});
-			})
-			.catch((error) => {
-				responseToClient(function () {
-					const status = error.response.status;
-					if (status === 401) {
-						toast.error("You must to login first.");
-					}
-				});
+			.finally(() => {
+				setOpen(false);
 			});
 	};
 

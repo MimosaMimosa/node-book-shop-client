@@ -1,33 +1,21 @@
-import axios from "axios";
+import { Cookie } from "@mui/icons-material";
 import Cookies from "js-cookie";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
 import NewLetter from "../components/NewLetter/NewLetter";
-import DataContext from "../store/Context/DataContext";
+import { fetchCarts } from "../redux/reducer/cartSlice";
 
 const Root = () => {
-	const { state, dispatch } = useContext(DataContext);
-
+	const dispatch = useDispatch();
+	const carts = useSelector((state) => state.carts.data);
 	useEffect(() => {
-		const token = Cookies.get("abc_token");
-		if (!Object.keys(state.carts).length && token) {
-			axios
-				.get(`${process.env.REACT_APP_API_URL}/api/v1/carts`, {
-					headers: {
-						authorization: `$1|${token}`,
-					},
-				})
-				.then((res) => {
-					dispatch({
-						type: "STORE_CARTS",
-						data: res.data.cart,
-					});
-				})
-				.catch((res) => {
-					console.error(res);
-				});
+		if (Cookies.get("abc_token") && !carts.length) {
+			dispatch(
+				fetchCarts(`${process.env.REACT_APP_API_URL}/api/v1/carts`)
+			);
 		}
 		/* eslint-disable */
 	}, []);

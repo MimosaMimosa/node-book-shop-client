@@ -4,23 +4,41 @@ import { useOutletContext } from "react-router-dom";
 import DataContext from "../../store/Context/DataContext";
 
 const OrderCard = ({ product }) => {
-	const { state, dispatch } = useContext(DataContext);
+	const { dispatch } = useContext(DataContext);
 	const token = useOutletContext();
 	let handlePlusTimeOut;
+	let handleMinusTimeOut;
 
-	const handleMinus = (orders, book) => {
-		let newOrder = [...orders];
-		let index = newOrder.findIndex(
-			(order) => order._id === product.book._id
-		);
-		if (index !== -1) {
-			if (newOrder[index].qty === 1) {
-				newOrder.splice(index, 1);
-			} else {
-				newOrder[index].qty -= 1;
-			}
+	const handleMinus = (quantity, id) => {
+		console.log(quantity);
+		if (quantity - 1 === 0) {
+			return false;
 		}
-		dispatch({ type: "MINUS_ORDERS", data: newOrder });
+		if (handlePlusTimeOut) {
+			clearTimeout(handleMinusTimeOut);
+		}
+		handleMinusTimeOut = axios
+			.post(
+				`${process.env.REACT_APP_API_URL}/api/v1/carts`,
+				{
+					book: id,
+					quantity: -1,
+				},
+				{
+					headers: {
+						authorization: `$1|${token}`,
+					},
+				}
+			)
+			.then((res) => {
+				dispatch({
+					type: "STORE_CARTS",
+					data: res.data.cart,
+				});
+			})
+			.catch((res) => {
+				console.error(res);
+			});
 	};
 	const handlePlus = (id) => {
 		if (handlePlusTimeOut) {
@@ -61,7 +79,7 @@ const OrderCard = ({ product }) => {
 						src={product.book.image[0].url}
 					/>
 					<span className='ml-10 text-xl font-[200]'>
-						Minimalistic shop for multipurpose use
+						{product.book.name}
 					</span>
 				</div>
 				<div className='w-[15%]'>
@@ -84,7 +102,10 @@ const OrderCard = ({ product }) => {
 							<button
 								className='block border text-xl px-3'
 								onClick={() => {
-									handleMinus(state.orders, product.book);
+									handleMinus(
+										product.quantity,
+										product.book
+									);
 								}}
 							>
 								-

@@ -6,13 +6,12 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import LogoutModal from "../Modal/LogoutModal";
+import { useSelector } from "react-redux";
 
 const TopNavBar = () => {
 	const [open, setOpen] = useState(false);
 	const { state: user, dispatch } = useContext(AuthContext);
-	const {
-		state: { carts },
-	} = useContext(DataContext);
+	const carts = useSelector((state) => state.carts.data);
 	const navigate = useNavigate();
 	useEffect(() => {
 		const user = Cookies.get("abc_user");
@@ -79,12 +78,12 @@ const TopNavBar = () => {
 						</Link>
 					</li>
 					{Object.keys(user).length ? (
-						<li className='mx-3 ml-5'>
+						<li className='ml-5'>
 							<span>{user.name}</span>
 						</li>
 					) : null}
 					{!user.name ? (
-						<li>
+						<li className='ml-5'>
 							<Link
 								to='/sign-up'
 								className='py-4 px-10 bg-red-600 text-sm text-white rounded-3xl'
@@ -93,7 +92,7 @@ const TopNavBar = () => {
 							</Link>
 						</li>
 					) : (
-						<li>
+						<li className='ml-3'>
 							<button
 								onClick={handleLogout}
 								className='py-4 px-10 bg-red-600 text-sm text-white rounded-3xl'
