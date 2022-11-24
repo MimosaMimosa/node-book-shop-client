@@ -1,6 +1,5 @@
 import SearchIcon from "@mui/icons-material/Search";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
-import DataContext from "../../store/Context/DataContext";
 import Cookies from "js-cookie";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/Context/AuthContext";

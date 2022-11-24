@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";
@@ -34,7 +34,7 @@ const BookDetails = () => {
 			})
 			.catch(({ response: { status } }) => {
 				if (status === 401) {
-					navigate("/login");
+					navigate("/login?reset=true");
 				}
 			})
 			.finally(() => {
@@ -50,8 +50,7 @@ const BookDetails = () => {
 				);
 				setBook(res.data.book);
 			} catch (error) {
-				Cookies.remove("node_book_shop");
-				navigate("/login");
+				console.error(error);
 			}
 		};
 		getBook(params.id);

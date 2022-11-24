@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import {
 	createBrowserRouter,
 	createRoutesFromElements,
+	redirect,
 	Route,
 	RouterProvider,
 } from "react-router-dom";
@@ -19,6 +20,7 @@ import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Blog from "./pages/Blog/Blog";
 import PrivateRoutes from "./middleware/PrivateRoutes";
 import Author from "./pages/Author/Author";
+import Cookies from "js-cookie";
 
 function App() {
 	const router = createBrowserRouter(
@@ -36,7 +38,21 @@ function App() {
 					<Route path='/blog' element={<Blog />}></Route>
 					<Route path='authors' element={<Author />}></Route>
 				</Route>
-				<Route path='/login' element={<Login />}></Route>
+				<Route
+					path='/login'
+					element={<Login />}
+					loader={({ request }) => {
+						const url = new URL(request.url);
+						if (url.searchParams.get("reset")) {
+							Cookies.remove("abc_token");
+							Cookies.remove("abc_user");
+							return true;
+						}
+						if (Cookies.get("abc_token")) {
+							return redirect("/");
+						}
+					}}
+				></Route>
 				<Route path='/sign-up' element={<SignUp />}></Route>
 				<Route path='*' element={<PageNotFound />}></Route>
 			</Fragment>

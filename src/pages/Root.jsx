@@ -1,4 +1,3 @@
-import { Cookie } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

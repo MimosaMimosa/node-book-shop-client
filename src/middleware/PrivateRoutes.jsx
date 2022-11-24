@@ -5,9 +5,13 @@ const PrivateRoutes = () => {
 	const location = useLocation();
 	const token = Cookies.get("abc_token");
 	return token ? (
-		<Outlet context={token}/>
+		<Outlet context={token} />
 	) : (
-		<Navigate to='/login' replace={true} state={{ from: location }} />
+		<Navigate
+			to='/login?reset=true'
+			replace={true}
+			state={{ from: location }}
+		/>
 	);
 };
 
