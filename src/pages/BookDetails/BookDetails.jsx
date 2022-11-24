@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";

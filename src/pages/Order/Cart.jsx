@@ -1,13 +1,11 @@
-import { useMemo } from "react";
 import PageBanner from "../../components/Bannder/PageBanner";
-import OrderLists from "./OrderLists";
+import CartList from "./CartList";
 
 const Cart = () => {
-    const pageBanner = useMemo(() => <PageBanner title="Add To Cart"/>, []);
   return (
-    <>
-        {pageBanner}
-        <OrderLists/>
+    <>  
+        <PageBanner title="Add To Cart"/>
+        <CartList/>
     </>
   )
 }

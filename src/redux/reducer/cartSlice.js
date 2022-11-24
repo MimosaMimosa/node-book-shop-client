@@ -31,6 +31,7 @@ export const postCarts = createAsyncThunk(
 		} catch (error) {
 			return rejectWithValue(error);
 		}
+
 	}
 );
 
@@ -85,14 +86,9 @@ export const cartSlice = createSlice({
 			}
 		);
 
-		builder.addCase(
-			postCarts.rejected,
-			(
-				state,
-			) => {
-				state.pending = null;
-			}
-		);
+		builder.addCase(postCarts.rejected, (state) => {
+			state.pending = null;
+		});
 	},
 });
 

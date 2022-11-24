@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
-import OrderCard from "./OrderCard";
+import CartItem from "./CartItem";
 
 const OrderLists = () => {
 	const [address, setAddress] = useState("");
@@ -37,7 +37,7 @@ const OrderLists = () => {
 			</div>
 			{carts.products?.map((product, index) => (
 				<Fragment key={product._id}>
-					<OrderCard product={product} />
+					<CartItem product={product} />
 					<hr className='mt-7' />
 				</Fragment>
 			))}
