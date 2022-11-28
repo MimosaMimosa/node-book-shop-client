@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { postLogin } from "../../redux/reducer/authSlice";
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -10,30 +10,21 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState({});
 	const location = useLocation();
+	const dispatch = useDispatch();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setErrors({});
-		axios
-			.post("http://localhost:4000/api/v1/auth/login", {
-				email,
-				password,
-			})
-			.then((res) => {
-				const { user, token } = res.data;
-				Cookies.set("abc_token", token, {
-					expires: 3,
-				});
-				Cookies.set("abc_user", JSON.stringify(user), {
-					expires: 3,
-				});
-				toast.success("Login Success");
-				navigate(location.state?.from?.pathname || "/");
+		dispatch(postLogin({ email, password }))
+			.unwrap()
+			.then(() => {
+				const redirectRoute = location.state?.from?.pathName;
+				toast.success("Login Successfully");
+				navigate(redirectRoute ? redirectRoute : "/");
 			})
 			.catch((error) => {
-				const data = error.response.data;
-				if (error.response.status === 422) {
-					setErrors(data);
+				if (error.status === 422) {
+					setErrors(error.response.data);
 				}
 			});
 	};

@@ -18,6 +18,25 @@ export const fetchCarts = createAsyncThunk(
 	}
 );
 
+export const deleteCartsProduct = createAsyncThunk(
+	"delete/deleteCartsProduct",
+	async (data, { rejectWithValue }) => {
+		try {
+			const res = await axios.delete(
+				`${process.env.REACT_APP_API_URL}/api/v1/carts/product/${data.id}`,
+				{
+					headers: {
+						authorization: `$1|${Cookies.get("abc_token")}`,
+					},
+				}
+			);
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
 export const postCarts = createAsyncThunk(
 	"post/postCarts",
 	async ({ url, data }, { rejectWithValue }) => {
@@ -31,7 +50,6 @@ export const postCarts = createAsyncThunk(
 		} catch (error) {
 			return rejectWithValue(error);
 		}
-
 	}
 );
 
@@ -48,7 +66,9 @@ export const cartSlice = createSlice({
 			fetchCarts.fulfilled,
 			(state, { payload: { carts } }) => {
 				state.pending = null;
-				state.data = carts;
+				if (carts) {
+					state.data = carts;
+				}
 			}
 		);
 
@@ -87,6 +107,22 @@ export const cartSlice = createSlice({
 		);
 
 		builder.addCase(postCarts.rejected, (state) => {
+			state.pending = null;
+		});
+
+		builder.addCase(
+			deleteCartsProduct.fulfilled,
+			(state, { payload: { carts } }) => {
+				state.pending = null;
+				state.data = carts;
+			}
+		);
+
+		builder.addCase(deleteCartsProduct.pending, (state) => {
+			state.pending = true;
+		});
+
+		builder.addCase(deleteCartsProduct.rejected, (state) => {
 			state.pending = null;
 		});
 	},

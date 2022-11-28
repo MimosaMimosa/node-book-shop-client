@@ -1,39 +1,56 @@
 import { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { postOrders, selectAll } from "../../redux/reducer/orderSlice";
 import CartItem from "./CartItem";
 
 const OrderLists = () => {
 	const [address, setAddress] = useState("");
 	const [phone, setPhone] = useState("");
 	const carts = useSelector((state) => state.carts.data);
+	const items = useSelector((state) =>
+		state.carts?.data?.products?.map((product) => product)
+	);
+	const orderItem = useSelector((state) => state.order.items);
+	const dispatch = useDispatch();
 
-	const handleOrder = (e) => {
-		// e.preventDefault();
-		// const data = {
-		// 	products: state.orders.map((order) => ({
-		// 		book: order._id,
-		// 		quantity: order.qty,
-		// 	})),
-		// 	phone,
-		// 	address,
-		// };
-		// axios
-		// 	.post(`${process.env.REACT_APP_API_URL}/api/v1/orders`, data)
-		// 	.then((res) => {
-		// 		console.log(res.data);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error);
-		// 	});
+	const handleOrder = () => {
+		const products = orderItem.map((item) => ({
+			book: item.book._id,
+			quantity: item.quantity,
+		}));
+
+		dispatch(postOrders({ products, address, phone }))
+			.unwrap()
+			.then((res) => {
+				toast.success(res.data.message)
+			})
+			.catch((res) => {
+				console.log(res);
+			});
 	};
 
-	return Object.keys(carts).length ? (
+	return carts.products?.length ? (
 		<div className='container mt-10'>
 			<div className='flex text-neutral-500 text-md'>
-				<h4 className='w-[60%]'>Product</h4>
+				<h4 className='w-[5%]'>
+					<input
+						checked={items?.length === orderItem.length}
+						onChange={(e) => {
+							dispatch(
+								selectAll({ checked: e.target.checked, items })
+							);
+						}}
+						id='red-checkbox'
+						type='checkbox'
+						className='w-4 h-4 text-red-600 bg-gray-100 rounded border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+					/>
+				</h4>
+				<h4 className='w-[45%]'>Product</h4>
 				<h4 className='w-[15%]'>Price</h4>
 				<h4 className='w-[10%]'>Quantity</h4>
 				<h4 className='w-[15%] text-end'>Total</h4>
+				<h4 className='w-[10%] text-end'>Action</h4>
 			</div>
 			{carts.products?.map((product, index) => (
 				<Fragment key={product._id}>

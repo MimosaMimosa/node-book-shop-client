@@ -12,7 +12,6 @@ const BestSeller = () => {
 		axios
 			.get(`${API_URL}/api/v1/books`)
 			.then((res) => {
-				console.log(res.data);
 				setBooks(res.data.books);
 			})
 			.catch((error) => {
@@ -23,7 +22,7 @@ const BestSeller = () => {
 	return (
 		<div className='bg-pink-soft'>
 			<div className='container py-10'>
-				<h2 className='text-3xl text-center font-bold pb-4'>
+				<h2 className='text-3xl	font-bold pb-4'>
 					Best Selling Book Ever
 				</h2>
 				<div className='mt-3'>

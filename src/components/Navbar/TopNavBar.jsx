@@ -13,9 +13,14 @@ const TopNavBar = () => {
 	const carts = useSelector((state) => state.carts.data);
 	const navigate = useNavigate();
 	useEffect(() => {
-		const user = Cookies.get("abc_user");
+		let user = Cookies.get("abc_user");
 		if (user) {
-			dispatch({ type: "STORE", data: JSON.parse(user) });
+			try {
+				user = JSON.parse(user);
+				dispatch({ type: "STORE", data: user });
+			} catch (error) {
+				navigate("/login?reset=true");
+			}
 		}
 		// eslint-disable-next-line
 	}, []);
@@ -70,7 +75,7 @@ const TopNavBar = () => {
 						<Link to='/carts'>
 							<LocalGroceryStoreOutlinedIcon className='text-xl' />
 							<span className='text-xs text-white rounded-[50%] w-[25px] h-[25px] bg-red-500 text-white absolute top-[-15px] left-[20px] flex items-center justify-center'>
-								{carts.products?.length
+								{carts?.products?.length
 									? carts.products.length
 									: 0}
 							</span>
