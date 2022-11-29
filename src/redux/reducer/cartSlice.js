@@ -60,7 +60,11 @@ export const cartSlice = createSlice({
 		pending: null,
 		errors: null,
 	},
-	reducers: {},
+	reducers: {
+		removeCart: (state) => {
+			state.data = [];
+		},
+	},
 	extraReducers(builder) {
 		builder.addCase(
 			fetchCarts.fulfilled,
@@ -76,19 +80,10 @@ export const cartSlice = createSlice({
 			state.pending = true;
 		});
 
-		builder.addCase(
-			fetchCarts.rejected,
-			(
-				state,
-				{
-					payload: {
-						response: { status },
-					},
-				}
-			) => {
-				state.pending = null;
-			}
-		);
+		builder.addCase(fetchCarts.rejected, (state) => {
+			console.log('aaa');
+			state.pending = null;
+		});
 
 		/**
 		 * post carts
@@ -127,5 +122,7 @@ export const cartSlice = createSlice({
 		});
 	},
 });
+
+export const { removeCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

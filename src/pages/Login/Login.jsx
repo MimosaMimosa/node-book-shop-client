@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { postLogin } from "../../redux/reducer/authSlice";
+import { logout, postLogin } from "../../redux/reducer/authSlice";
+import { removeCart } from "../../redux/reducer/cartSlice";
+import { removeOrder } from "../../redux/reducer/orderSlice";
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -12,15 +14,21 @@ const Login = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 
+	useEffect(()=>{
+		dispatch(logout())
+		dispatch(removeCart())
+		dispatch(removeOrder())
+	})
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setErrors({});
 		dispatch(postLogin({ email, password }))
 			.unwrap()
 			.then(() => {
-				const redirectRoute = location.state?.from?.pathName;
+				const intendedUrl = location.state?.from?.pathName;
 				toast.success("Login Successfully");
-				navigate(redirectRoute ? redirectRoute : "/");
+				navigate(intendedUrl ? intendedUrl : "/");
 			})
 			.catch((error) => {
 				if (error.status === 422) {

@@ -44,9 +44,12 @@ const orderSlice = createSlice({
 				state.items.push(item);
 			}
 		},
+		removeOrder: (state) => {
+			state.items = [];
+		},
 	},
 });
 
-export const { selectAll, select } = orderSlice.actions;
+export const { selectAll, select, removeOrder } = orderSlice.actions;
 
 export default orderSlice.reducer;

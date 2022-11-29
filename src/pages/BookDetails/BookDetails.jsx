@@ -5,23 +5,22 @@ import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";
 import ShareIcon from "@mui/icons-material/Share";
 import AlertModal from "../../components/Modal/AlertModal";
-import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
-import { postCarts } from "../../redux/reducer/cartSlice";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { postCarts } from "../../redux/reducer/authSlice";
 
 const BookDetails = () => {
 	const params = useParams();
 	const [book, setBook] = useState({});
 	const [open, setOpen] = useState(false);
-	const loader = useSelector((state) => state.carts.pending);
+	const [loader, setLoader] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const handleAction = () => {
+		setLoader(true);
 		dispatch(
 			postCarts({
-				url: `${process.env.REACT_APP_API_URL}/api/v1/carts`,
 				data: {
 					book: params.id,
 					quantity: 1,
@@ -38,6 +37,7 @@ const BookDetails = () => {
 				}
 			})
 			.finally(() => {
+				setLoader(false);
 				setOpen(false);
 			});
 	};

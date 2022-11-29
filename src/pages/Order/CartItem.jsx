@@ -1,14 +1,13 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AlertModal from "../../components/Modal/AlertModal";
-import { deleteCartsProduct, postCarts } from "../../redux/reducer/cartSlice";
-import { select } from "../../redux/reducer/orderSlice";
+import { deleteCartsProduct, postCarts, select } from "../../redux/reducer/authSlice";
 
 const CartItem = ({ product }) => {
 	const [open, setOpen] = useState(false);
 
-	const items = useSelector((state) => state.order.items);
-	const loader = useSelector((state) => state.carts.pending);
+	const orders = useSelector((state) => state.auth.orders);
+	const loader = useSelector((state) => state.auth.pending);
 
 	const deleteId = useRef();
 	const cancelPlusPromise = useRef();
@@ -26,7 +25,6 @@ const CartItem = ({ product }) => {
 		cancelMinusPromise.current = setTimeout(() => {
 			dispatch(
 				postCarts({
-					url: `${process.env.REACT_APP_API_URL}/api/v1/carts`,
 					data: {
 						book: id,
 						quantity: -1,
@@ -43,7 +41,6 @@ const CartItem = ({ product }) => {
 		cancelPlusPromise.current = setTimeout(() => {
 			dispatch(
 				postCarts({
-					url: `${process.env.REACT_APP_API_URL}/api/v1/carts`,
 					data: {
 						book: id,
 						quantity: 1,
@@ -78,7 +75,7 @@ const CartItem = ({ product }) => {
 						onChange={() => {
 							dispatch(select(product));
 						}}
-						checked={items.find(item => item._id === product._id) ? true : false}
+						checked={orders?.find(order => order._id === product._id) ? true : false}
 						id='red-checkbox'
 						type='checkbox'
 						className='w-4 h-4 text-red-600 bg-gray-100 rounded border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'

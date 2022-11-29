@@ -1,21 +1,19 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postOrders, selectAll } from "../../redux/reducer/orderSlice";
+import { selectAll } from "../../redux/reducer/authSlice";
+import { postOrders } from "../../redux/reducer/orderSlice";
 import CartItem from "./CartItem";
 
 const OrderLists = () => {
 	const [address, setAddress] = useState("");
 	const [phone, setPhone] = useState("");
-	const carts = useSelector((state) => state.carts.data);
-	const items = useSelector((state) =>
-		state.carts?.data?.products?.map((product) => product)
-	);
-	const orderItem = useSelector((state) => state.order.items);
+	const carts = useSelector((state) => state.auth.carts);
+	const orders = useSelector((state) => state.auth.orders)
 	const dispatch = useDispatch();
 
 	const handleOrder = () => {
-		const products = orderItem.map((item) => ({
+		const products = orders.map((item) => ({
 			book: item.book._id,
 			quantity: item.quantity,
 		}));
@@ -23,23 +21,21 @@ const OrderLists = () => {
 		dispatch(postOrders({ products, address, phone }))
 			.unwrap()
 			.then((res) => {
-				toast.success(res.data.message)
+				toast.success(res.data.message);
 			})
 			.catch((res) => {
 				console.log(res);
 			});
 	};
 
-	return carts.products?.length ? (
+	return carts?.products?.length ? (
 		<div className='container mt-10'>
 			<div className='flex text-neutral-500 text-md'>
 				<h4 className='w-[5%]'>
 					<input
-						checked={items?.length === orderItem.length}
+						checked={carts?.products?.length === orders?.length}
 						onChange={(e) => {
-							dispatch(
-								selectAll({ checked: e.target.checked, items })
-							);
+							dispatch(selectAll());
 						}}
 						id='red-checkbox'
 						type='checkbox'

@@ -1,29 +1,18 @@
 import SearchIcon from "@mui/icons-material/Search";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
-import Cookies from "js-cookie";
-import { useContext, useEffect, useState } from "react";
-import AuthContext from "../../store/Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import LogoutModal from "../Modal/LogoutModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { logout, setAuthUser } from "../../redux/reducer/authSlice";
+import Cookies from "js-cookie";
 
 const TopNavBar = () => {
 	const [open, setOpen] = useState(false);
-	const { state: user, dispatch } = useContext(AuthContext);
-	const carts = useSelector((state) => state.carts.data);
+	const carts = useSelector((state) => state.auth.carts);
+	const authUser = useSelector((state) => state.auth.user);
 	const navigate = useNavigate();
-	useEffect(() => {
-		let user = Cookies.get("abc_user");
-		if (user) {
-			try {
-				user = JSON.parse(user);
-				dispatch({ type: "STORE", data: user });
-			} catch (error) {
-				navigate("/login?reset=true");
-			}
-		}
-		// eslint-disable-next-line
-	}, []);
+	const dispatch = useDispatch();
 
 	const handleLogout = () => {
 		setOpen(true);
@@ -31,11 +20,23 @@ const TopNavBar = () => {
 
 	const handleAction = () => {
 		setOpen(false);
-		Cookies.remove("abc_token");
-		Cookies.remove("abc_user");
-		dispatch({ type: "STORE", data: {} });
-		navigate("/");
+		dispatch(logout());
+		navigate('/')
 	};
+
+	useEffect(() => {
+		try {
+			const token = Cookies.get("abc_token");
+			let user = Cookies.get("abc_user");
+			if (!authUser.token && token && user) {
+				user = JSON.parse(user);
+				dispatch(setAuthUser({ user, token }));
+			}
+		} catch (error) {
+			navigate("/login?reset=true");
+		}
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<div className='flex justify-between items-center'>
@@ -75,18 +76,16 @@ const TopNavBar = () => {
 						<Link to='/carts'>
 							<LocalGroceryStoreOutlinedIcon className='text-xl' />
 							<span className='text-xs text-white rounded-[50%] w-[25px] h-[25px] bg-red-500 text-white absolute top-[-15px] left-[20px] flex items-center justify-center'>
-								{carts?.products?.length
-									? carts.products.length
-									: 0}
+								{carts?.products?.length || authUser.carts || 0}
 							</span>
 						</Link>
 					</li>
-					{Object.keys(user).length ? (
+					{authUser.token ? (
 						<li className='ml-5'>
-							<span>{user.name}</span>
+							<span>{authUser.name}</span>
 						</li>
 					) : null}
-					{!user.name ? (
+					{!authUser.token ? (
 						<li className='ml-5'>
 							<Link
 								to='/sign-up'
