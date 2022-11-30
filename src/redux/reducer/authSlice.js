@@ -2,6 +2,26 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+export const postOrders = createAsyncThunk(
+	"post/Orders",
+	async (data, { rejectWithValue }) => {
+		try {
+			const res = await axios.post(
+				`${process.env.REACT_APP_API_URL}/api/v1/orders`,
+				data,
+				{
+					headers: {
+						authorization: `$1|${Cookies.get("abc_token")}`,
+					},
+				}
+			);
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
 export const fetchCarts = createAsyncThunk(
 	"get/fetchCarts",
 	async (url, { rejectWithValue }) => {
@@ -86,14 +106,16 @@ const authSlice = createSlice({
 	},
 	reducers: {
 		logout: (state) => {
-			Cookies.remove("abc_token");
 			Cookies.remove("abc_user");
 			state.user = {};
 			state.carts = {};
 			state.orders = [];
 		},
-		setAuthUser: (state, { payload: { user, token } }) => {
+		setAuthUser: (state, { payload: { user, token, carts } }) => {
 			state.user = { ...user, token };
+			if (carts) {
+				state.carts = carts;
+			}
 		},
 		selectAll: (state) => {
 			const totalCart = state.carts?.products;
@@ -118,7 +140,6 @@ const authSlice = createSlice({
 		builder.addCase(
 			postLogin.fulfilled,
 			(state, { payload: { user, token, carts } }) => {
-				Cookies.set("abc_user", JSON.stringify(user));
 				Cookies.set("abc_token", token);
 				state.user = { ...user, token };
 				if (carts) state.carts = carts;
@@ -165,9 +186,18 @@ const authSlice = createSlice({
 
 		builder.addCase(
 			deleteCartsProduct.fulfilled,
-			(state, { payload: { carts } }) => {
+			(
+				state,
+				{
+					payload: { carts },
+					meta: {
+						arg: { id },
+					},
+				}
+			) => {
 				state.pending = null;
 				state.carts = carts;
+				state.orders = state.orders.filter((order) => order._id !== id);
 			}
 		);
 

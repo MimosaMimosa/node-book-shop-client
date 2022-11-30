@@ -1,4 +1,4 @@
-import PageBanner from "../../components/Bannder/PageBanner";
+import PageBanner from "../../components/Banner/PageBanner";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";

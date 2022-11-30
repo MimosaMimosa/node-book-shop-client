@@ -3,9 +3,8 @@ import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStore
 import { Link, useNavigate } from "react-router-dom";
 import LogoutModal from "../Modal/LogoutModal";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { logout, setAuthUser } from "../../redux/reducer/authSlice";
-import Cookies from "js-cookie";
+import { useState } from "react";
+import { logout } from "../../redux/reducer/authSlice";
 
 const TopNavBar = () => {
 	const [open, setOpen] = useState(false);
@@ -21,22 +20,8 @@ const TopNavBar = () => {
 	const handleAction = () => {
 		setOpen(false);
 		dispatch(logout());
-		navigate('/')
+		navigate("/");
 	};
-
-	useEffect(() => {
-		try {
-			const token = Cookies.get("abc_token");
-			let user = Cookies.get("abc_user");
-			if (!authUser.token && token && user) {
-				user = JSON.parse(user);
-				dispatch(setAuthUser({ user, token }));
-			}
-		} catch (error) {
-			navigate("/login?reset=true");
-		}
-		// eslint-disable-next-line
-	}, []);
 
 	return (
 		<div className='flex justify-between items-center'>
@@ -75,8 +60,8 @@ const TopNavBar = () => {
 					<li className='relative mx-3'>
 						<Link to='/carts'>
 							<LocalGroceryStoreOutlinedIcon className='text-xl' />
-							<span className='text-xs text-white rounded-[50%] w-[25px] h-[25px] bg-red-500 text-white absolute top-[-15px] left-[20px] flex items-center justify-center'>
-								{carts?.products?.length || authUser.carts || 0}
+							<span className='text-xs rounded-[50%] w-[25px] h-[25px] bg-red-500 text-white absolute top-[-15px] left-[20px] flex items-center justify-center'>
+								{carts?.products?.length || 0}
 							</span>
 						</Link>
 					</li>

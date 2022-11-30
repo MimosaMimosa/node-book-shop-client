@@ -19,13 +19,20 @@ import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Blog from "./pages/Blog/Blog";
 import PrivateRoutes from "./middleware/PrivateRoutes";
 import Author from "./pages/Author/Author";
-import { login } from "./loader/routeloader";
+import { isLogin, login } from "./loader/routeloader";
+import ErrorBoundary from "./components/Error/ErrorBoundary";
 
 function App() {
 	const router = createBrowserRouter(
 		createRoutesFromElements(
 			<Fragment>
-				<Route path='/' element={<Root />}>
+				<Route
+					path='/'
+					element={<Root />}
+					loader={isLogin}
+					id='root'
+					errorElement={<ErrorBoundary />}
+				>
 					<Route index element={<Home />}></Route>
 					<Route path='/books/:id' element={<BookDetails />}></Route>
 					<Route path='/categories' element={<Category />}></Route>
@@ -38,7 +45,11 @@ function App() {
 					<Route path='authors' element={<Author />}></Route>
 				</Route>
 				<Route>
-					<Route path='/login' element={<Login />} loader={login}></Route>
+					<Route
+						path='/login'
+						element={<Login />}
+						loader={login}
+					></Route>
 				</Route>
 				<Route path='/sign-up' element={<SignUp />}></Route>
 				<Route path='*' element={<PageNotFound />}></Route>

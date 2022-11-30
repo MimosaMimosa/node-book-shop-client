@@ -2,15 +2,16 @@ import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selectAll } from "../../redux/reducer/authSlice";
-import { postOrders } from "../../redux/reducer/orderSlice";
+import { postOrders } from "../../redux/reducer/authSlice";
 import CartItem from "./CartItem";
 
 const OrderLists = () => {
 	const [address, setAddress] = useState("");
 	const [phone, setPhone] = useState("");
 	const carts = useSelector((state) => state.auth.carts);
-	const orders = useSelector((state) => state.auth.orders)
+	const orders = useSelector((state) => state.auth.orders);
 	const dispatch = useDispatch();
+	const [error, setError] = useState({});
 
 	const handleOrder = () => {
 		const products = orders.map((item) => ({
@@ -23,8 +24,12 @@ const OrderLists = () => {
 			.then((res) => {
 				toast.success(res.data.message);
 			})
-			.catch((res) => {
-				console.log(res);
+			.catch((error) => {
+				const getError = error.response.data;
+				if (getError.products) {
+					toast.error("Item is not allowed to be empty.");
+				}
+				setError(getError);
 			});
 	};
 
@@ -59,24 +64,39 @@ const OrderLists = () => {
 				<h4 className='w-[15%] text-end'>${carts.subtotal}</h4>
 			</div>
 			<div className='flex justify-end items-end gap-4 flex-col my-5'>
-				<input
-					type='text'
-					placeholder='Address'
-					value={address}
-					onChange={(e) => {
-						setAddress(e.target.value);
-					}}
-					className='w-[350px] py-2 shadow-sm rounded-3xl focus:border-0 bg-[#f4f4f4] ring-0 border-0 focus:ring-0 outline-none'
-				/>
-				<input
-					value={phone}
-					onChange={(e) => {
-						setPhone(e.target.value);
-					}}
-					type='text'
-					placeholder='Phone'
-					className='w-[350px] py-2 shadow-sm rounded-3xl focus:border-0 bg-[#f4f4f4] ring-0 border-0 focus:ring-0 outline-none'
-				/>
+				<div>
+					<input
+						type='text'
+						placeholder='Address'
+						value={address}
+						onChange={(e) => {
+							setAddress(e.target.value);
+						}}
+						className='w-[350px] py-2 shadow-sm rounded-3xl focus:border-0 bg-[#f4f4f4] ring-0 border-0 focus:ring-0 outline-none'
+					/>
+					{error.address ? (
+						<div className='text-red-600 ml-2 my-1 text-xs'>
+							{error.address}
+						</div>
+					) : null}
+				</div>
+				<div>
+					<input
+						value={phone}
+						onChange={(e) => {
+							setPhone(e.target.value);
+						}}
+						type='text'
+						placeholder='Phone'
+						className='w-[350px] py-2 shadow-sm rounded-3xl focus:border-0 bg-[#f4f4f4] ring-0 border-0 focus:ring-0 outline-none'
+					/>
+					{error.phone ? (
+						<div className='text-red-600 my-1 ml-2 text-xs'>
+							{error.phone}
+						</div>
+					) : null}
+				</div>
+
 				<button
 					className='rounded-3xl bg-red-600 py-3 px-10 mt-4 text-white'
 					onClick={handleOrder}

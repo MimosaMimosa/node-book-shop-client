@@ -1,5 +1,5 @@
-import Banner from "../../components/Bannder/Banner"
-import BestSeller from "../../components/BookCard/BestSeller"
+import Banner from "../../components/Banner/Banner"
+import BestSeller from "../../components/Book/BestSeller"
 import FeatureThisWeek from "../../components/FeatureThisWeek/FeatureThisWeek"
 import LatestBook from "../../components/LatestBook/LatestBook"
 

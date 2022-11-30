@@ -3,8 +3,6 @@ import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout, postLogin } from "../../redux/reducer/authSlice";
-import { removeCart } from "../../redux/reducer/cartSlice";
-import { removeOrder } from "../../redux/reducer/orderSlice";
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -14,11 +12,10 @@ const Login = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 
-	useEffect(()=>{
-		dispatch(logout())
-		dispatch(removeCart())
-		dispatch(removeOrder())
-	})
+	useEffect(() => {
+		/* eslint-disable */
+		dispatch(logout());
+	}, []);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -31,8 +28,12 @@ const Login = () => {
 				navigate(intendedUrl ? intendedUrl : "/");
 			})
 			.catch((error) => {
-				if (error.status === 422) {
+				const status = error.response.status;
+				if (status === 422) {
 					setErrors(error.response.data);
+				}
+				if (status === 401) {
+					toast.error("Invalid email or password");
 				}
 			});
 	};
@@ -68,8 +69,8 @@ const Login = () => {
 										}
 									/>
 								</div>
-								<div className='text-red-600 capitalize mt-1 text-xs'>
-									{errors.email || null}.
+								<div className='text-red-600 mt-1 text-xs'>
+									{errors.email || null}
 								</div>
 							</label>
 							<label className='mt-8 block' htmlFor='password'>
@@ -87,8 +88,8 @@ const Login = () => {
 										}
 									/>
 								</div>
-								<div className='text-red-600 capitalize mt-1 text-xs'>
-									{errors.password || null}.
+								<div className='text-red-600 mt-1 text-xs'>
+									{errors.password || null}
 								</div>
 							</label>
 							<div className='mt-8 flex justify-between'>

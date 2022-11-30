@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
-import BookCard from "../BookCard/BookCard";
+import BookCard from "../Book/BookCard";
 import BookCardSkeleton from "../Skeleton/BookCardSkeleton";
 
 const FilterBook = ({ search }) => {

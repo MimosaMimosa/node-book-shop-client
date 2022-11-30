@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StarHalfOutlinedIcon from "@mui/icons-material/StarHalfOutlined";
@@ -8,14 +8,22 @@ import AlertModal from "../../components/Modal/AlertModal";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { postCarts } from "../../redux/reducer/authSlice";
+import Comment from "../../components/comment/Comment";
+import AuthorDetail from "../../components/author/AuthorDetail";
+import BookDescription from "../../components/Book/BookDescription";
 
 const BookDetails = () => {
 	const params = useParams();
 	const [book, setBook] = useState({});
 	const [open, setOpen] = useState(false);
+	const [select, setSelect] = useState("description");
 	const [loader, setLoader] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	const handleSelect = (e) => {
+		setSelect(e.currentTarget.id);
+	};
 
 	const handleAction = () => {
 		setLoader(true);
@@ -41,6 +49,21 @@ const BookDetails = () => {
 				setOpen(false);
 			});
 	};
+
+	const selectMemo = useMemo(() => {
+		switch (select) {
+			case "description":
+				return <BookDescription book={book}/>;
+			case "author":
+				return <AuthorDetail author={book.author} />;
+			case "comments":
+				return <Comment />;
+			case "review":
+				return <p className='font-thin text-neutral-500'>review</p>;
+			default:
+				break;
+		}
+	}, [select, book]);
 
 	useEffect(() => {
 		const getBook = async (id) => {
@@ -108,7 +131,7 @@ const BookDetails = () => {
 									</div>
 									<div className='flex items-center mt-10'>
 										<button
-											className='bg-white hover:bg-red-600 hover:text-white text-black rounded-3xl border py-3 px-10'
+											className='bg-white hover:bg-red-600	00 hover:text-white text-black rounded-3xl border py-3 px-10'
 											onClick={() => {
 												setOpen(true);
 											}}
@@ -126,58 +149,54 @@ const BookDetails = () => {
 						</div>
 					</div>
 					<div className='container mt-10'>
-						<div className='flex'>
-							<button className='mr-5 rounded-3xl border-1 bg-red-600 text-white py-2 px-10 text-white'>
-								Description
-							</button>
-							<button className='mr-5 rounded-3xl border-2 text-black py-2 px-10'>
-								Author
-							</button>
-							<button className='mr-5 rounded-3xl border-2 text-black py-2 px-10'>
-								Comments
-							</button>
-							<button className='mr-5 rounded-3xl border-2 text-black py-2 px-10'>
-								Review
-							</button>
-						</div>
-						<div className='mt-10 leading-8'>
-							<p className='font-thin text-neutral-500'>
-								Beryl Cook is one of Britain’s most talented and
-								amusing artists .Beryl’s pictures feature women
-								of all shapes and sizes enjoying themselves
-								.Born between the two world wars, Beryl Cook
-								eventually left Kendrick School in Reading at
-								the age of 15, where she went to secretarial
-								school and then into an insurance office. After
-								moving to London and then Hampton, she
-								eventually married her next door neighbour from
-								Reading, John Cook. He was an officer in the
-								Merchant Navy and after he left the sea in 1956,
-								they bought a pub for a year before John took a
-								job in Southern Rhodesia with a motor company.
-								Beryl bought their young son a box of
-								watercolours, and when showing him how to use
-								it, she decided that she herself quite enjoyed
-								painting. John subsequently bought her a child’s
-								painting set for her birthday and it was with
-								this that she produced her first significant
-								work, a half-length portrait of a dark-skinned
-								lady with a vacant expression and large drooping
-								breasts. It was aptly named ‘Hangover’ by
-								Beryl’s husband and It is often frustrating to
-								attempt to plan meals that are designed for one.
-								Despite this fact, we are seeing more and more
-								recipe books and Internet websites that are
-								dedicated to the act of cooking for one. Divorce
-								and the death of spouses or grown children
-								leaving for college are all reasons that someone
-								accustomed to cooking for more than one would
-								suddenly need to learn how to adjust all the
-								cooking practices utilized before into a
-								streamlined plan of cooking that is more
-								efficient for one person creating less.
-							</p>
-						</div>
+						<ul className='flex'>
+							<li onClick={handleSelect} id='description'>
+								<button
+									className={`mr-5 rounded-3xl border-2 py-2 px-10 ${
+										select === "description"
+											? "bg-red-600 text-white"
+											: "bg-inherit"
+									}`}
+								>
+									Description
+								</button>
+							</li>
+							<li onClick={handleSelect} id='author'>
+								<button
+									className={`mr-5 rounded-3xl border-2 py-2 px-10 ${
+										select === "author"
+											? "bg-red-600 text-white"
+											: "bg-inherit"
+									}`}
+								>
+									Author
+								</button>
+							</li>
+
+							<li onClick={handleSelect} id='comments'>
+								<button
+									className={`mr-5 rounded-3xl border-2 py-2 px-10 ${
+										select === "comments"
+											? "bg-red-600 text-white"
+											: "bg-inherit"
+									}`}
+								>
+									Comments
+								</button>
+							</li>
+							<li onClick={handleSelect} id='review'>
+								<button
+									className={`mr-5 rounded-3xl border-2 py-2 px-10 ${
+										select === "review"
+											? "bg-red-600 text-white"
+											: "bg-inherit"
+									}`}
+								>
+									Review
+								</button>
+							</li>
+						</ul>
+						<div className='mt-5 leading-8'>{selectMemo}</div>
 					</div>
 				</>
 			) : null}
