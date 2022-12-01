@@ -5,17 +5,12 @@ import { json, redirect } from "react-router-dom";
 export const login = ({ request }) => {
 	const url = new URL(request.url);
 	if (url.searchParams.get("reset")) {
-		return true;
+		Cookies.remove("abc_token");
 	}
-	try {
-		const user = JSON.parse(Cookies.get("abc_user"));
-		if (user && Cookies.get("abc_token")) {
-			return redirect("/");
-		}
-		throw Error("Token Error");
-	} catch (error) {
-		return true;
+	if (Cookies.get("abc_token")) {
+		return redirect("/");
 	}
+	return true;
 };
 
 export const isLogin = async () => {
@@ -33,6 +28,32 @@ export const isLogin = async () => {
 			);
 			return json(
 				{ user: res.data.user, carts: res.data.carts, token },
+				{ status: res.data.status }
+			);
+		} catch (error) {
+			throw json(error.response, {
+				status: error.response.status,
+			});
+		}
+	}
+
+	return true;
+};
+
+export const userOrders = async () => {
+	const token = Cookies.get("abc_token");
+	if (token) {
+		try {
+			const res = await axios.get(
+				`${process.env.REACT_APP_API_URL}/api/v1/orders`,
+				{
+					headers: {
+						authorization: `$1|${token}`,
+					},
+				}
+			);
+			return json(
+				{ orders:res.data.orders },
 				{ status: res.data.status }
 			);
 		} catch (error) {

@@ -1,7 +1,12 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import AlertModal from "../../components/Modal/AlertModal";
-import { deleteCartsProduct, postCarts, select } from "../../redux/reducer/authSlice";
+import {
+	deleteCartsProduct,
+	postCarts,
+	select,
+} from "../../redux/reducer/authSlice";
 
 const CartItem = ({ product }) => {
 	const [open, setOpen] = useState(false);
@@ -75,18 +80,24 @@ const CartItem = ({ product }) => {
 						onChange={() => {
 							dispatch(select(product));
 						}}
-						checked={orders?.find(order => order._id === product._id) ? true : false}
+						checked={
+							orders?.find((order) => order._id === product._id)
+								? true
+								: false
+						}
 						id='red-checkbox'
 						type='checkbox'
 						className='w-4 h-4 text-red-600 bg-gray-100 rounded border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
 					/>
 				</div>
 				<div className='w-[45%] flex items-center'>
-					<img
-						className='object-contain w-[200px]'
-						alt={product.book.name}
-						src={product.book.image[0].url}
-					/>
+					<Link to={`/books/${product.book._id}`}>
+						<img
+							className='object-contain w-[200px]'
+							alt={product.book.name}
+							src={product.book.image[0].url}
+						/>
+					</Link>
 					<span className='ml-10 text-xl font-[200]'>
 						{product.book.name}
 					</span>

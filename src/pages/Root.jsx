@@ -13,11 +13,11 @@ import { setAuthUser } from "../redux/reducer/authSlice";
 const Root = () => {
 	const { user, carts, token } = useRouteLoaderData("root");
 	const dispatch = useDispatch();
-	const authUser = useSelector(state => state.auth.user.name)
+	const authUser = useSelector((state) => state.auth.user.name);
 
 	useEffect(() => {
 		/* eslint-disable */
-		if(!authUser && user){
+		if (!authUser && user) {
 			dispatch(setAuthUser({ user, carts, token }));
 		}
 	}, []);

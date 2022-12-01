@@ -3,7 +3,7 @@ const AuthorDetail = ({ author }) => {
 		<div className='flex items-center  gap-4'>
 			<div className='bg-pink-soft w-[20%] flex-col flex py-10 justify-center items-center'>
 				<div
-					className='w-[150px] h-[150px] bg-no-repeat bg-center  rounded-full'
+					className='w-[140px] h-[140px] bg-no-repeat bg-center bg-cover  rounded-full'
 					style={{ backgroundImage: `url(${author?.image?.url})` }}
 				/>
 				<h2 className='font-bold text-md mt-1'>{author?.name}</h2>

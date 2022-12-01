@@ -55,7 +55,9 @@ const TopNavBar = () => {
 						<span>FAQ</span>
 					</li>
 					<li className='mx-3'>
-						<span>Order</span>
+						<Link to='/orders'>
+							<span>Orders</span>
+						</Link>
 					</li>
 					<li className='relative mx-3'>
 						<Link to='/carts'>

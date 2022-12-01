@@ -148,7 +148,7 @@ const BookDetails = () => {
 							</div>
 						</div>
 					</div>
-					<div className='container mt-10'>
+					<div className='container mt-5'>
 						<ul className='flex'>
 							<li onClick={handleSelect} id='description'>
 								<button

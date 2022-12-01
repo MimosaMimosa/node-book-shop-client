@@ -25,31 +25,18 @@ export const postOrders = createAsyncThunk(
 const orderSlice = createSlice({
 	name: "orders",
 	initialState: {
-		items: [],
+		data: [],
 	},
 	reducers: {
-		selectAll: (state, { payload: { checked, items } }) => {
-			state.items = [];
-			if (checked) {
-				state.items = items;
-			}
+		store: (state, { payload: { orders } }) => {
+			state.data = orders;
 		},
-		select: (state, { payload: item }) => {
-			const index = state.items.findIndex(
-				(selectItem) => selectItem._id === item._id
-			);
-			if (index !== -1) {
-				state.items.splice(index, 1);
-			} else {
-				state.items.push(item);
-			}
-		},
-		removeOrder: (state) => {
-			state.items = [];
+		remove: (state) => {
+			state.data = [];
 		},
 	},
 });
 
-export const { selectAll, select, removeOrder } = orderSlice.actions;
+export const { store, remove } = orderSlice.actions;
 
 export default orderSlice.reducer;
