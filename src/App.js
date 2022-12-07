@@ -12,7 +12,8 @@ import { ToastContainer } from "react-toastify";
 import SignUp from "./pages/SignUp/SignUp";
 import Category from "./pages/Category/Category";
 import Root from "./pages/Root";
-import BookDetails from "./pages/BookDetails/BookDetails";
+import BookDetails from "./pages/Book/BookDetail";
+import BookList from "./pages/Book/BookList";
 import Cart from "./pages/Cart/Cart";
 import Contact from "./pages/Contact/Contact";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
@@ -22,6 +23,7 @@ import Author from "./pages/Author/Author";
 import { isLogin, login, userOrders } from "./loader/routeloader";
 import ErrorBoundary from "./components/Error/ErrorBoundary";
 import Order from "./pages/Order/Order";
+
 
 function App() {
 	const router = createBrowserRouter(
@@ -36,6 +38,10 @@ function App() {
 				>
 					<Route index element={<Home />}></Route>
 					<Route path='/books/:id' element={<BookDetails />}></Route>
+					<Route
+						path='/books'
+						element={<BookList />}
+					></Route>
 					<Route path='/categories' element={<Category />}></Route>
 					<Route path='/about' element={<About />}></Route>
 					<Route element={<PrivateRoutes />}>
@@ -44,7 +50,7 @@ function App() {
 							path='/orders'
 							element={<Order />}
 							loader={userOrders}
-							id="order"
+							id='order'
 						></Route>
 					</Route>
 					<Route path='/contact' element={<Contact />}></Route>

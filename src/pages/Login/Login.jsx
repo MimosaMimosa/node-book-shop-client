@@ -23,11 +23,12 @@ const Login = () => {
 		dispatch(postLogin({ email, password }))
 			.unwrap()
 			.then(() => {
-				const intendedUrl = location.state?.from?.pathName;
+				const intendedUrl = location.state?.from?.pathname;
 				toast.success("Login Successfully");
 				navigate(intendedUrl ? intendedUrl : "/");
 			})
 			.catch((error) => {
+				console.log(error)
 				const status = error.response.status;
 				if (status === 422) {
 					setErrors(error.response.data);

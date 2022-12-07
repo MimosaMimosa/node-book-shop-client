@@ -106,7 +106,7 @@ const authSlice = createSlice({
 	},
 	reducers: {
 		logout: (state) => {
-			Cookies.remove("abc_user");
+			Cookies.remove("abc_token");
 			state.user = {};
 			state.carts = {};
 			state.orders = [];
@@ -140,7 +140,9 @@ const authSlice = createSlice({
 		builder.addCase(
 			postLogin.fulfilled,
 			(state, { payload: { user, token, carts } }) => {
-				Cookies.set("abc_token", token);
+				Cookies.set("abc_token", token, {
+					expires: 24,
+				});
 				state.user = { ...user, token };
 				if (carts) state.carts = carts;
 			}

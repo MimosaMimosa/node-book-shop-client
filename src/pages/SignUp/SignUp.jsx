@@ -4,24 +4,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const SignUp = () => {
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [passwordConfirmation, setPasswordConfirmation] = useState("");
+	const [errors, setErrors] = useState({});
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		axios
-			.post("http://localhost:4000/api/v1/users", {
+			.post(`${process.env.REACT_APP_API_URL}/api/v1/users`, {
 				name,
 				email,
 				password,
+				password_confirmation: passwordConfirmation,
 			})
 			.then(() => {
 				toast.success("Register Successfully");
-				navigate('/login')
+				navigate("/login");
 			})
 			.catch((error) => {
+				setErrors(error.response.data)
 				console.log(error);
 			});
 	};
@@ -52,6 +56,9 @@ const SignUp = () => {
 									onChange={(e) => setName(e.target.value)}
 								/>
 							</div>
+							<div className='text-red-600 mt-1 text-xs'>
+								{errors.name || null}
+							</div>
 						</label>
 						<label className='mt-8 block' htmlFor='email'>
 							<label htmlFor='email' className='text-md'>
@@ -65,6 +72,9 @@ const SignUp = () => {
 									placeholder='Enter email address'
 									onChange={(e) => setEmail(e.target.value)}
 								/>
+							</div>
+							<div className='text-red-600 mt-1 text-xs'>
+								{errors.email || null}
 							</div>
 						</label>
 						<label className='mt-8 block' htmlFor='password'>
@@ -82,6 +92,9 @@ const SignUp = () => {
 									}
 								/>
 							</div>
+							<div className='text-red-600 mt-1 text-xs'>
+								{errors.password || null}
+							</div>
 						</label>
 						<label className='mt-8 block' htmlFor='confirm'>
 							<label htmlFor='confirm' className='text-md'>
@@ -89,11 +102,17 @@ const SignUp = () => {
 							</label>
 							<div className='border-2 border-gray-3 px-5 py-3 mt-1'>
 								<input
+									onChange={(e) => {
+										setPasswordConfirmation(e.target.value);
+									}}
 									id='confirm'
 									type='password'
 									className='outline-none border-0 focus:ring-0 w-full p-0'
 									placeholder='Password'
 								/>
+							</div>
+							<div className='text-red-600 mt-1 text-xs'>
+								{errors.password_confirmation || null}
 							</div>
 						</label>
 						<div className='mt-8 flex justify-between items-center'>

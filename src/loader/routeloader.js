@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { json, redirect } from "react-router-dom";
+import store from "../redux/store/store";
 
 export const login = ({ request }) => {
 	const url = new URL(request.url);
@@ -14,8 +15,9 @@ export const login = ({ request }) => {
 };
 
 export const isLogin = async () => {
+	const user = store.getState().auth.user;
 	const token = Cookies.get("abc_token");
-	if (token) {
+	if (token && !Object.keys(user).length) {
 		try {
 			const res = await axios.post(
 				`${process.env.REACT_APP_API_URL}/api/v1/auth/is-login`,
@@ -53,7 +55,7 @@ export const userOrders = async () => {
 				}
 			);
 			return json(
-				{ orders:res.data.orders },
+				{ orders: res.data.orders },
 				{ status: res.data.status }
 			);
 		} catch (error) {

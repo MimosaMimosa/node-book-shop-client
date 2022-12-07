@@ -3,10 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Link } from "react-router-dom";
 
-const SuccessModal = ({
-	open = false,
-	setOpen,
-}) => {
+const SuccessModal = ({ open = false, setOpen }) => {
 	const cancelButtonRef = useRef(null);
 	return (
 		<Transition.Root show={open} as={Fragment}>
@@ -39,31 +36,35 @@ const SuccessModal = ({
 							leaveFrom='opacity-100 translate-y-0 sm:scale-100'
 							leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
 						>
-							<Dialog.Panel className='py-10 relative transform overflow-hidden rounded-[2.5em] bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm'>
+							<Dialog.Panel className='py-10 relative transform overflow-hidden rounded-[2.5em] bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xs'>
 								<CheckCircleIcon
 									sx={{
 										color: "rgb(14 159 110 / var(--tw-bg-opacity))",
-										fontSize: "120px",
+										fontSize: "100px",
 									}}
 								/>
 								<h3 className='fond-bold text-lg mt-5'>
 									Amazing !
 								</h3>
-								<p className='text-gray-500 mt-3'>
+								<p className='text-gray-500 mt-3 text-sm'>
 									Item is successfully added to order list.
 								</p>
 								<button
 									onClick={() => {
+										window.scrollTo({
+											top: 0,
+											behavior: "smooth",
+										});
 										setOpen(false);
 									}}
 									type='button'
-									className='text-white rounded-full bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br mt-5 focus:outline-none   font-medium text-sm px-28 py-4 text-center mr-2 mb-2'
+									className='text-white text-sm rounded-full bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br mt-5 focus:outline-none  font-medium  px-24 py-4 text-center mr-2 mb-2'
 								>
 									Back to Cart
 								</button>
 								<div>
 									<Link to='/orders'>
-										<span className='text-red-500 block mt-5'>
+										<span className='text-red-500 block mt-5 text-sm'>
 											Go to my order list.
 										</span>
 									</Link>

@@ -1,6 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
-import { Link, useNavigate } from "react-router-dom";
+import { Form, Link, useNavigate, useSubmit } from "react-router-dom";
 import LogoutModal from "../Modal/LogoutModal";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const TopNavBar = () => {
 	const authUser = useSelector((state) => state.auth.user);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const submit = useSubmit();
 
 	const handleLogout = () => {
 		setOpen(true);
@@ -36,18 +37,21 @@ const TopNavBar = () => {
 						<img src='./assets/image/logo.webp' alt='logo' />
 					</h1>
 				</Link>
-				<div className='bg-white p-3'>
-					<div className='flex w-[350px] justify-between items-center rounded-3xl p-1 border-3xl border'>
-						<input
-							type='text'
-							className='w-[300px] outline-none border-0 focus:ring-0'
-							placeholder='Search Book By Name Or Author....'
-						/>
-						<span className='mr-2'>
-							<SearchIcon />
-						</span>
+				<Form action='/books' onChange={(e) => submit(e.currentTarget)}>
+					<div className='bg-white p-3'>
+						<div className='flex w-[350px] justify-between items-center rounded-3xl p-1 border-3xl border'>
+							<input
+								name='q'
+								type='text'
+								className='w-[300px] outline-none border-0 focus:ring-0'
+								placeholder='Search Book By Name Or Author....'
+							/>
+							<span className='mr-2'>
+								<SearchIcon />
+							</span>
+						</div>
 					</div>
-				</div>
+				</Form>
 			</div>
 			<div>
 				<ul className='flex items-center'>
